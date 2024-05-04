@@ -8,21 +8,31 @@ public class Manager : MonoBehaviour
     public const float PIX_TO_UNI = 1f / UNI_TO_PIX;
 
     // Parameters \\
+    [Header("Global Settings")]
+    [Range(0.25f, 4f)] public float fadeOutMultiplier = 1.5f;
+    [Range(0.25f, 4f)] public float fadeInMultiplier = 2.5f;
+    public float pauseBlackOnFade = 0.5f;
 
-    public Parent TitleParent;
-    public Parent KitchenParent;
-    public Parent PantryParent;
-    public Parent NarrateParent;
+    [Header("Object Pointers")]
+    public TitleParent titleParent;
+    public KitchenParent kitchenParent;
+    public PantryParent pantryParent;
+    public NarrateParent narrateParent;
+
+
+    // Shared State \\
+
+    [HideInInspector] public int finishedDishes;
+    [HideInInspector] public float fadeMultiplier = 0f; // 0 to start, but 1 is default after that
 
 
     // Storage \\
 
     private Parent activeParent;
     private List<Button> activeButtons;
+    private PostEffect tintEffect;
 
     private bool mouseWasPressed;
-
-    public int finishedDishes;
 
 
     // Triggers \\
@@ -31,6 +41,7 @@ public class Manager : MonoBehaviour
     {
         activeButtons = new List<Button>();
         finishedDishes = 0;
+        tintEffect = gameObject.GetComponent<PostEffect>();
 
         InitializeParents();
         ChooseActiveParent(Parent.Type.TITLE);
@@ -47,27 +58,27 @@ public class Manager : MonoBehaviour
     public void ChooseActiveParent (Parent.Type parent)
     {
         // set the correct active parent
-        TitleParent.SetActive(parent == Parent.Type.TITLE);
-        KitchenParent.SetActive(parent == Parent.Type.KITCHEN);
-        PantryParent.SetActive(parent == Parent.Type.PANTRY);
-        NarrateParent.SetActive(parent == Parent.Type.NARRATE);
+        titleParent.gameObject.SetActive(parent == Parent.Type.TITLE);
+        kitchenParent.gameObject.SetActive(parent == Parent.Type.KITCHEN);
+        pantryParent.gameObject.SetActive(parent == Parent.Type.PANTRY);
+        narrateParent.gameObject.SetActive(parent == Parent.Type.NARRATE);
         switch (parent)
         {
             case Parent.Type.TITLE:
-                TitleParent.Begin();
-                activeParent = TitleParent;
+                titleParent.Begin();
+                activeParent = titleParent;
                 break;
             case Parent.Type.KITCHEN:
-                KitchenParent.Begin();
-                activeParent = KitchenParent;
+                kitchenParent.Begin();
+                activeParent = kitchenParent;
                 break;
             case Parent.Type.PANTRY:
-                PantryParent.Begin();
-                activeParent = PantryParent;
+                pantryParent.Begin();
+                activeParent = pantryParent;
                 break;
             case Parent.Type.NARRATE:
-                NarrateParent.Begin();
-                activeParent = NarrateParent;
+                narrateParent.Begin();
+                activeParent = narrateParent;
                 break;
         }
 
@@ -87,15 +98,20 @@ public class Manager : MonoBehaviour
         }
     }
 
+    public void UpdateTintEffect (float strength)
+    {
+        tintEffect.material.SetFloat("_Strength", strength);
+    }
+
 
     // Utility \\
 
     private void InitializeParents ()
     {
-        TitleParent.manager = this;
-        KitchenParent.manager = this;
-        PantryParent.manager = this;
-        NarrateParent.manager = this;
+        titleParent.manager = this;
+        kitchenParent.manager = this;
+        pantryParent.manager = this;
+        narrateParent.manager = this;
     }
 
     private void HandleMouseInput ()

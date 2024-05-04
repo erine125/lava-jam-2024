@@ -5,28 +5,23 @@ using UnityEngine;
 public class TitleParent : Parent
 {
 
-    public Sprite backgroundSprite;
-
-    public override void Begin ()
-    {
-        SpriteRenderer bgSr = GetBackground();
-        bgSr.color = Color.white;
-        bgSr.sprite = backgroundSprite;
-    }
+    // Triggers \\
 
     public override void InputButton (string message)
     {
-        if (message == "Start")
+        if (!transition.isTransitioning ())
         {
-            // TODO add gradual screen transition
-
-            manager.ChooseActiveParent(Type.NARRATE);        
-        }
-        else if (message == "Rules")
-        {
-            // TODO show the rules
+            if (message == "Start")
+            {
+                transition.StartLoadingOut(Type.NARRATE);
+                manager.narrateParent.page = NarrateParent.Page.INTRO;
+            }
+            else if (message == "Rules")
+            {
+                transition.StartLoadingOut(Type.NARRATE, 0);
+                manager.narrateParent.page = NarrateParent.Page.RULES;
+            }
         }
     }
-
 
 }
