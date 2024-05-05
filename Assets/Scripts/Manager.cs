@@ -30,6 +30,7 @@ public class Manager : MonoBehaviour
     [HideInInspector] public int currentRound = 1;
     [HideInInspector] public float fadeMultiplier = 0f; // 0 to start, but 1 is default after that
     [HideInInspector] public Dish chosenDish;
+    [HideInInspector] public List<Ingredient> heldIngredients;
 
 
     // Storage \\
@@ -53,6 +54,7 @@ public class Manager : MonoBehaviour
         tintEffect = gameObject.GetComponent<PostEffect>();
 
         LoadDishesAndIngredients();
+        heldIngredients = new List<Ingredient>();
 
         InitializeParents();
         ChooseActiveParent(Parent.Type.TITLE);

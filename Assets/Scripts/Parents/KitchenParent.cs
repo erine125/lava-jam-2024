@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Xml;
 using TMPro;
 using UnityEngine;
 
@@ -109,6 +107,13 @@ public class KitchenParent : Parent
 
     private void ChooseText ()
     {
+        dishNameText.text = "";
+        dishFlavorText.text = "";
+        dishSepText.text = "";
+        recipeListText.text = "";
+        recipeFlavorText.text = "";
+        recipeBeginText.text = "";
+
         if (activity == Activity.RECIPE)
         {
             switch (manager.currentRound)
@@ -126,13 +131,6 @@ public class KitchenParent : Parent
             choiceText.text = "What should I make?";
             opt1Text.text = "Something\nLocal"; //TODO
             opt2Text.text = "Something\nFancy"; //TODO
-
-            dishNameText.text = "";
-            dishFlavorText.text = "";
-            dishSepText.text = "";
-            recipeListText.text = "";
-            recipeFlavorText.text = "";
-            recipeBeginText.text = "";
         }
         else
         {

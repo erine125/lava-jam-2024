@@ -60,6 +60,8 @@ public abstract class Parent : MonoBehaviour
 
     public virtual void DoneFadingIn () { }
 
+    public virtual void DoneFadingOut () { }
+
 
     // Functionality \\
 
@@ -173,6 +175,7 @@ public abstract class Parent : MonoBehaviour
 
                 if (scl >= 1)
                 {
+                    parent.DoneFadingOut();
                     parent.manager.ChooseActiveParent(transitionType);
                     transitionType = Type.NONE;
                     fadingTimer = 0;
