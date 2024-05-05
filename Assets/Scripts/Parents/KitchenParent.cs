@@ -97,10 +97,12 @@ public class KitchenParent : Parent
         {
             ChooseDishes();
             GetTintOverlay().color = new Color(0, 0, 0, 0.95f);   
+            potRender.sprite = null;
         }
         else if (activity == Activity.COOKING)
         {
             PrepareIngredients();
+            potRender.sprite = potFrames[1];
         }
         ChooseText();
     }
@@ -189,13 +191,13 @@ public class KitchenParent : Parent
                     titleText.text = "ROUND 1 - APPETIZER";
                     choiceText.text = "Your chance to make a good first impression, and show the world that Volcanic cuisine isn’t to be overlooked... What will you make?";
                     opt1Text.text = "Something\nLocal";
-                    opt2Text.text = "Something\nFancy";
+                    opt2Text.text = "Something\nTrendy";
                     break;
                 case 2:
                     titleText.text = "ROUND 2 - MAIN COURSE";
                     choiceText.text = "The main dish. Show the judges that you cook with heart and soul... What will you make?";
                     opt1Text.text = "Something\nLuxurious";
-                    opt2Text.text = "Something\nHomey";
+                    opt2Text.text = "Something\nComforting";
                     break;
                 case 3:
                     titleText.text = "ROUND 3 - DESSERT";

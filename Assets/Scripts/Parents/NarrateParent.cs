@@ -113,18 +113,18 @@ SuperChef International Committee";
             case Page.DIED_LAVA:
                 titleText.text = "YOU FELL IN LAVA!";
                 rightText.text =
-                    @"You quickly scamper to safety. The lava is quite as hot as you imagined and you are able to survive with only minor burns. Happy to still be alive, you decide to put your dreams of being the next SuperChef on hold for a little while.
+                    @"Thanks to your heat tolerance built up from years of spicy cooking, you survived with only minor burns. Happy to still be alive, you decide to put your dreams of being the next Super Chef on hold until you recover.
 
-A few weeks later you see the new SuperChef crowned and you are so full of envy you immediately decide to send in your application for the next year of the contest.";
+A few weeks later, you watch this year's Super Chef get crowned, and you are so full of envy you immediately send in your application for next year's contest.";
                 dishText.text = "";
                 contText.text = "(Click to Play Next Year)";
                 break;
             case Page.DIED_ERUPT:
                 titleText.text = "THE VOLCANO ERUPTED!";
                 rightText.text =
-                    @"You got a little too greedy while gathering ingredients and the volcano erupted. It was only a very minor eruption, but you are quite cooked. In your last moments you wonder if the judges will account for that when they score you.
+                    @"You got a little too greedy while gathering ingredients and the volcano erupted. It was only a very minor eruption, but you are quite cooked. In your last moments, you wonder if the judges will account for that when they score you.
 
-Oh well, at least you were doing what you loved. Maybe your twin brother can apply to the competition next year and win in your honor…";
+Oh well, at least you went out doing what you loved. Maybe your twin brother can apply to the competition next year and win in your honor…";
                 dishText.text = "";
                 contText.text = "(Click to Play Next Year)";
                 break;
