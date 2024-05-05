@@ -13,13 +13,12 @@ public class TitleParent : Parent
         {
             if (message == "Start")
             {
-                transition.StartLoadingOut(Type.NARRATE);
                 manager.narrateParent.page = NarrateParent.Page.INTRO;
+                transition.StartLoadingOut(Type.NARRATE);
             }
             else if (message == "Rules")
             {
-                transition.StartLoadingOut(Type.NARRATE, 0);
-                manager.narrateParent.page = NarrateParent.Page.RULES;
+                transition.StartLoadingOut(Type.RULES, 0);
             }
         }
     }

@@ -15,6 +15,7 @@ public class PantryParent : Parent
     public static float GridSquareSize = 0.4444f;
     public Vector2 GridAnchor = new Vector2(-8.889f, -4.8884f); // player centered of bottom left tile
     public TextAsset tilemapCsv;
+    public float timeAllowed = 31f;
 
 
     // State \\
@@ -27,7 +28,7 @@ public class PantryParent : Parent
     [HideInInspector] public Tile[][] tiles;
     private List<Vector2> groundTiles;
 
-    private float timeRemaining = 31f;
+    private float timeRemaining;
 
 
     // Storage \\
@@ -62,6 +63,7 @@ public class PantryParent : Parent
         manager.heldIngredients.Clear();
         DistributeCollectibles();
         itemFrame.SetActive(true);
+        timeRemaining = timeAllowed;
 
         for (int i = 0; i < itemSprites.Length; i++)
         {
@@ -196,7 +198,7 @@ public class PantryParent : Parent
         List<string> toDistribute = new List<string>();
         toDistribute.AddRange(manager.chosenDish.ingredients);
         string[] keys = manager.ingredients.Keys.ToArray<string>();
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
         {
             int random = Mathf.FloorToInt(Random.Range(0, 15.999f));
             toDistribute.Add(keys[random]);

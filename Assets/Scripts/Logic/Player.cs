@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     public float walkSpeed;
     public float timePerFrame = 0.2f;
     public float dashMultiplier = 4f;
-    public float dashLength = 4f;
+    public float dashLength = 3f;
     public float pickupDistance = 1.5f;
 
 

@@ -12,6 +12,6 @@ volcanic-rock-salt	Compared to common table salt, this special rock salt deliver
 lavasquid-ink	Lavasquids expel this ink as a form of protection. It has a rich, spicy flavor.
 hot-cocoa-bean	The inside of these beans taste just like sweet hot cocoa. They’re commonly used in drinks and desserts.
 fire-fern	This exotic herb fetches high prices at any market, but is best freshly picked from a lava cave.
-sweet-cave-crystal	These naturally-forming sugar crystals are beloved by children and, when collected fresh, make excellent specialty gifts.
+cave-sugar-crystal	These naturally-forming sugar crystals are beloved by children and, when collected fresh, make excellent specialty gifts.
 pyroconut	It is one of the few trees that can withstand the temperature of volcanic caves. The fruit takes its name from its fiery red husk and spicy tang.
 scorch-root-seed	This spice is ground from the seed of the scorch root, which grows on cave roofs and falls when ripe. The seeds can also be eaten like nuts.

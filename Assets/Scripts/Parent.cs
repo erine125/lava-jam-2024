@@ -100,6 +100,7 @@ public abstract class Parent : MonoBehaviour
         KITCHEN,
         PANTRY,
         NARRATE,
+        RULES,
         NONE
     }
 

@@ -15,6 +15,7 @@ public class Manager : MonoBehaviour
 
     [Header("Object Pointers")]
     public TitleParent titleParent;
+    public RulesParent rulesParent;
     public KitchenParent kitchenParent;
     public PantryParent pantryParent;
     public NarrateParent narrateParent;
@@ -71,6 +72,7 @@ public class Manager : MonoBehaviour
     public void ChooseActiveParent (Parent.Type parent)
     {
         titleParent.gameObject.SetActive(parent == Parent.Type.TITLE);
+        rulesParent.gameObject.SetActive(parent == Parent.Type.RULES);
         kitchenParent.gameObject.SetActive(parent == Parent.Type.KITCHEN);
         pantryParent.gameObject.SetActive(parent == Parent.Type.PANTRY);
         narrateParent.gameObject.SetActive(parent == Parent.Type.NARRATE);
@@ -79,6 +81,10 @@ public class Manager : MonoBehaviour
             case Parent.Type.TITLE:
                 titleParent.Begin();
                 activeParent = titleParent;
+                break;
+            case Parent.Type.RULES:
+                rulesParent.Begin();
+                activeParent = rulesParent;
                 break;
             case Parent.Type.KITCHEN:
                 kitchenParent.Begin();
@@ -100,7 +106,7 @@ public class Manager : MonoBehaviour
     public void RefreshButtons ()
     {
         activeButtons.Clear();
-        GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
+        GameObject[] allObjects = FindObjectsOfType<GameObject>();
         foreach (GameObject go in allObjects)
         {
             if (go.activeInHierarchy)
@@ -128,6 +134,7 @@ public class Manager : MonoBehaviour
         kitchenParent.manager = this;
         pantryParent.manager = this;
         narrateParent.manager = this;
+        rulesParent.manager = this;
     }
 
     private void HandleMouseInput ()
