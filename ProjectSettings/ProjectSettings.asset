@@ -707,11 +707,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 3b43972a-59e2-41a4-a2df-130f74867a89
+  cloudProjectId: b799dd52-7746-47a8-956e-2f6e175bf476
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: LavaChef
-  organizationId: unity_j99pfayqrwee_a
+  organizationId: emerald8
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
