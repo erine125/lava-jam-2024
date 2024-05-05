@@ -9,6 +9,12 @@ public class KitchenParent : Parent
 
     public Activity activity { private get; set; }
 
+    public Sprite[] backgroundFrames;
+    public float OscillatePerSecond = 10f;
+    public float BasePotShakeTime = 1f;
+
+    public Sprite[] potFrames;
+
 
     // Storage \\
 
@@ -17,8 +23,24 @@ public class KitchenParent : Parent
         recipeFlavorText, recipeBeginText;
     private Button envelopeLeft, envelopeRight, recipePaper;
     private SpriteRenderer[] listedIngredients;
+    private TextMeshProUGUI cookInstructText;
+    private SpriteRenderer potRender;
 
     private Dish optionLeft, optionRight;
+
+
+    // State \\
+
+    private float timeSinceOsc = 0;
+    private int oscillateFrame = 0;
+
+    private int ingredientsInPot = 0;
+
+    private float timeSincePot = 0;
+    private bool potGoingRight = true;
+    private int potFrame = 1;
+
+    private Ingredient[] availableIngredients;
 
 
     // Triggers \\
@@ -43,6 +65,9 @@ public class KitchenParent : Parent
         recipeFlavorText = GameObject.Find("KitRecipeFlavorText").GetComponent<TextMeshProUGUI>();
         recipeBeginText = GameObject.Find("KitRecipeBeginText").GetComponent<TextMeshProUGUI>();
 
+        cookInstructText = GameObject.Find("KitInstructionText").GetComponent<TextMeshProUGUI>();
+        potRender = GameObject.Find("KitPot").GetComponent<SpriteRenderer>();
+
         listedIngredients = new SpriteRenderer[4];
         for (int i = 0; i < listedIngredients.Length; i++)
         {
@@ -54,9 +79,15 @@ public class KitchenParent : Parent
     {
         base.Begin();
 
+        ingredientsInPot = 0;
+        potFrame = 1;
+        potRender.sprite = potFrames[1];
+
         recipePaper.gameObject.SetActive(false);
         envelopeLeft.gameObject.SetActive(activity == Activity.RECIPE);
         envelopeRight.gameObject.SetActive(activity == Activity.RECIPE);
+        itemFrame.SetActive(activity == Activity.COOKING);
+
         foreach (SpriteRenderer sr in listedIngredients)
         {
             sr.sprite = null;
@@ -66,6 +97,10 @@ public class KitchenParent : Parent
         {
             ChooseDishes();
             GetTintOverlay().color = new Color(0, 0, 0, 0.92f);   
+        }
+        else if (activity == Activity.COOKING)
+        {
+            PrepareIngredients();
         }
         ChooseText();
     }
@@ -94,12 +129,42 @@ public class KitchenParent : Parent
             {
                 transition.StartLoadingOut(Type.PANTRY);
             }
+            else if (message == "PanItem1")
+            {
+                ingredientsInPot += 1;
+                availableIngredients[0] = null;
+                itemSprites[0].sprite = null;
+                CheckDoneCooking();
+            }
+            else if (message == "PanItem2")
+            {
+                ingredientsInPot += 1;
+                availableIngredients[1] = null;
+                itemSprites[1].sprite = null;
+                CheckDoneCooking();
+            }
+            else if (message == "PanItem3")
+            {
+                ingredientsInPot += 1;
+                availableIngredients[2] = null;
+                itemSprites[2].sprite = null;
+                CheckDoneCooking();
+            }
+            else if (message == "PanItem4")
+            {
+                ingredientsInPot += 1;
+                availableIngredients[3] = null;
+                itemSprites[3].sprite = null;
+                CheckDoneCooking();
+            }
         }
     }
 
     public override void Update()
     {
         base.Update();
+
+        HandleOscillating();
     }
 
 
@@ -114,27 +179,31 @@ public class KitchenParent : Parent
         recipeFlavorText.text = "";
         recipeBeginText.text = "";
 
+        cookInstructText.text = activity == Activity.COOKING ? "Click ingredients to add them!" : "";
+
         if (activity == Activity.RECIPE)
         {
             switch (manager.currentRound)
             {
                 case 1:
                     titleText.text = "ROUND 1 - APPETIZER";
+                    choiceText.text = "What should I make?";
+                    opt1Text.text = "Something\nLocal";
+                    opt2Text.text = "Something\nFancy";
                     break;
                 case 2:
                     titleText.text = "ROUND 2 - MAIN COURSE";
+                    choiceText.text = "What should I make?";
+                    opt1Text.text = "Something\nLuxurious";
+                    opt2Text.text = "Something\nHomey";
                     break;
                 case 3:
                     titleText.text = "ROUND 3 - DESSERT";
+                    choiceText.text = "What should I make?";
+                    opt1Text.text = "Something\nNostalgic";
+                    opt2Text.text = "Something\nIconic";
                     break;
             }
-            choiceText.text = "What should I make?";
-            opt1Text.text = "Something\nLocal"; //TODO
-            opt2Text.text = "Something\nFancy"; //TODO
-        }
-        else
-        {
-            // TODO
         }
     }
 
@@ -181,6 +250,88 @@ public class KitchenParent : Parent
             recipeFlavorText.text += objIng.flavorText + "\n\n\n\n";
             listedIngredients[i].sprite = objIng.sprite;
         }
+    }
+
+    private void HandleOscillating ()
+    {
+        timeSinceOsc += Time.deltaTime;
+        if (timeSinceOsc >= 1f / OscillatePerSecond)
+        {
+            oscillateFrame = (oscillateFrame + 1) % 41;
+            GetBackground().sprite = backgroundFrames[oscillateFrame];
+            timeSinceOsc = 0;
+        }
+
+        if (ingredientsInPot > 0)
+        {
+            timeSincePot += Time.deltaTime;
+            if (timeSincePot >= BasePotShakeTime / (ingredientsInPot))
+            {
+                if (potFrame == 2 || potFrame == 0)
+                {
+                    potFrame = 1;
+                }
+                else
+                {
+                    potFrame = potGoingRight ? 2 : 0;
+                    potGoingRight = !potGoingRight;
+                }
+                potRender.sprite = potFrames[potFrame];
+                timeSincePot = 0;
+            }
+        }
+    }
+
+    private void PrepareIngredients ()
+    {
+        availableIngredients = manager.heldIngredients.ToArray ();
+
+        for (int i = 0; i < availableIngredients.Length; i++)
+        {
+            if (availableIngredients[i] != null)
+            {
+                itemSprites[i].sprite = availableIngredients[i].sprite;
+            }
+        }
+
+        CheckDoneCooking();
+    }
+
+    private void CheckDoneCooking()
+    {
+        for (int i = 0; i < availableIngredients.Length; i++)
+        {
+            if (availableIngredients[i] != null)
+            {
+                return;
+            }
+        }
+
+        // done cooking, check if correct
+        bool wasCorrect = true;
+        foreach (string shouldHave in manager.chosenDish.ingredients)
+        {
+            bool found = false;
+            foreach (Ingredient actuallyHas in manager.heldIngredients)
+            {
+                if (shouldHave == actuallyHas.filename)
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                wasCorrect = false;
+                break;
+            }
+        }
+
+        // leave the kitchen
+        manager.narrateParent.page = wasCorrect ?
+            NarrateParent.Page.DISH_SUCCESS : NarrateParent.Page.DISH_FAIL;
+        transition.StartLoadingOut(Type.NARRATE, 0.2f);
     }
 
 

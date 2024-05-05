@@ -9,6 +9,7 @@ public class Button : MonoBehaviour
     public string message;
     public Sprite normalSprite;
     public Sprite highlightSprite;
+    public bool DontOverrideSprite;
 
 
     // State \\
@@ -47,7 +48,10 @@ public class Button : MonoBehaviour
 
     void Update()
     {
-        HandleHighlighting();
+        if (!DontOverrideSprite)
+        {
+            HandleHighlighting();
+        }
     }
 
 

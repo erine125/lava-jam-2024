@@ -20,6 +20,12 @@ public abstract class Parent : MonoBehaviour
     protected TransitionMgr transition;
 
 
+    // Storage \\
+
+    protected GameObject itemFrame;
+    protected static SpriteRenderer[] itemSprites;
+
+
     // Triggers \\
 
     /// <summary>
@@ -28,6 +34,16 @@ public abstract class Parent : MonoBehaviour
     public virtual void Awake()
     {
         transition = new TransitionMgr(this);
+        itemFrame = GameObject.Find("ItemFrame");
+
+        if (itemSprites == null)
+        {
+            itemSprites = new SpriteRenderer[4];
+            itemSprites[0] = GameObject.Find("PanItem1").GetComponent<SpriteRenderer>();
+            itemSprites[1] = GameObject.Find("PanItem2").GetComponent<SpriteRenderer>();
+            itemSprites[2] = GameObject.Find("PanItem3").GetComponent<SpriteRenderer>();
+            itemSprites[3] = GameObject.Find("PanItem4").GetComponent<SpriteRenderer>();
+        }
     }
 
 
@@ -42,6 +58,7 @@ public abstract class Parent : MonoBehaviour
     {
         GetBackground().sprite = backgroundSprite;
         GetTintOverlay().color = new Color(0, 0, 0, 0);
+        itemFrame.SetActive(false);
 
         transition.StartLoadingIn();
     }

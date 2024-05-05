@@ -33,7 +33,6 @@ public class PantryParent : Parent
     // Storage \\
 
     private TextMeshProUGUI timerText;
-    private SpriteRenderer[] itemSprites;
 
     private List<Vector2> collectibleLocations;
     private List<GameObject> collectibleObjects; // these two must be matching order
@@ -54,12 +53,6 @@ public class PantryParent : Parent
 
         player = GameObject.Find("PlayerChar").GetComponent<Player>();
         timerText = GameObject.Find("PanTimerText").GetComponent<TextMeshProUGUI>();
-
-        itemSprites = new SpriteRenderer[4];
-        itemSprites[0] = GameObject.Find("PanItem1").GetComponent<SpriteRenderer>();
-        itemSprites[1] = GameObject.Find("PanItem2").GetComponent<SpriteRenderer>();
-        itemSprites[2] = GameObject.Find("PanItem3").GetComponent<SpriteRenderer>();
-        itemSprites[3] = GameObject.Find("PanItem4").GetComponent<SpriteRenderer>();
     }
 
     public override void Begin()
@@ -68,6 +61,14 @@ public class PantryParent : Parent
 
         manager.heldIngredients.Clear();
         DistributeCollectibles();
+        itemFrame.SetActive(true);
+
+        for (int i = 0; i < itemSprites.Length; i++)
+        {
+            itemSprites[i].sprite = null;
+        }
+
+        player.Init();
     }
 
     public override void Update ()
@@ -268,10 +269,9 @@ public class PantryParent : Parent
             {
                 manager.heldIngredients.Add(collectibleIngredients[index]);
                 itemSprites[manager.heldIngredients.Count - 1].sprite = collectibleIngredients[index].sprite;
-                Debug.Log(collectibleIngredients[index].displayName);
 
                 // remove it from the view
-                GameObject.Destroy(collectibleObjects[index]);
+                Destroy(collectibleObjects[index]);
                 collectibleLocations.RemoveAt(index);
                 collectibleObjects.RemoveAt(index);
                 collectibleIngredients.RemoveAt(index);
