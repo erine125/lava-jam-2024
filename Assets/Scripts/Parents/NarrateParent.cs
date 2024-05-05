@@ -10,7 +10,7 @@ public class NarrateParent : Parent
 
     public Page page { private get; set; }
 
-    private TextMeshProUGUI titleText;
+    private TextMeshProUGUI titleText, rightText, contText;
 
 
     // Triggers \\
@@ -19,7 +19,9 @@ public class NarrateParent : Parent
     {
         base.Awake();
 
-        titleText = GameObject.Find("TitleText").GetComponent<TextMeshProUGUI>();
+        titleText = GameObject.Find("NarTitleText").GetComponent<TextMeshProUGUI>();
+        rightText = GameObject.Find("NarRightText").GetComponent<TextMeshProUGUI>();
+        contText = GameObject.Find("NarContText").GetComponent<TextMeshProUGUI>();
     }
 
     public override void Begin()
@@ -27,6 +29,18 @@ public class NarrateParent : Parent
         base.Begin();
 
         ChooseText();
+    }
+
+    public override void InputClick(Vector2 pos)
+    {
+        if (!transition.IsTransitioning ())
+        {
+            if (page == Page.INTRO)
+            {
+                transition.StartLoadingOut(Type.KITCHEN);
+                manager.kitchenParent.activity = KitchenParent.Activity.RECIPE;
+            }
+        }
     }
 
 
@@ -38,6 +52,9 @@ public class NarrateParent : Parent
         {
             case Page.INTRO:
                 titleText.text = "WELCOME TO LAVA CHEF!";
+                rightText.text = "TODO - Hello and welcome. You are about to compete in Lava Chef."
+                    + "There will be three rounds, one for each course!";
+                contText.text = "(Click to Continue)";
                 break;
             case Page.RULES:
                 titleText.text = "RULES OF LAVA CHEF";
@@ -53,7 +70,10 @@ public class NarrateParent : Parent
         INTRO,
         DISH_SUCCESS,
         DISH_FAIL,
-        RULES
+        RULES,
+        DIED_LAVA,
+        DIED_ERUPT,
+        WINNER
     }
 
 }

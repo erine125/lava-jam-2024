@@ -9,7 +9,7 @@ public class TitleParent : Parent
 
     public override void InputButton (string message)
     {
-        if (!transition.isTransitioning ())
+        if (!transition.IsTransitioning ())
         {
             if (message == "Start")
             {

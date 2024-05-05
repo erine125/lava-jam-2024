@@ -40,8 +40,8 @@ public abstract class Parent : MonoBehaviour
     /// </summary>
     public virtual void Begin()
     {
-        SpriteRenderer bgSr = GetBackground();
-        bgSr.sprite = backgroundSprite;
+        GetBackground().sprite = backgroundSprite;
+        GetTintOverlay().color = new Color(0, 0, 0, 0);
 
         transition.StartLoadingIn();
     }
@@ -66,6 +66,10 @@ public abstract class Parent : MonoBehaviour
     protected SpriteRenderer GetBackground ()
     {
         return GameObject.Find("Background").GetComponent<SpriteRenderer>();
+    }
+    protected SpriteRenderer GetTintOverlay ()
+    {
+        return GameObject.Find("TintOverlay").GetComponent<SpriteRenderer>();
     }
 
 
@@ -149,7 +153,7 @@ public abstract class Parent : MonoBehaviour
             }
         }
 
-        public bool isTransitioning ()
+        public bool IsTransitioning ()
         {
             return transitionType != Type.NONE || loadingIn;
         }

@@ -22,7 +22,7 @@ public class Manager : MonoBehaviour
 
     // Shared State \\
 
-    [HideInInspector] public int finishedDishes;
+    [HideInInspector] public int currentRound = 1;
     [HideInInspector] public float fadeMultiplier = 0f; // 0 to start, but 1 is default after that
 
 
@@ -40,7 +40,7 @@ public class Manager : MonoBehaviour
     void Start()
     {
         activeButtons = new List<Button>();
-        finishedDishes = 0;
+        currentRound = 1;
         tintEffect = gameObject.GetComponent<PostEffect>();
 
         InitializeParents();

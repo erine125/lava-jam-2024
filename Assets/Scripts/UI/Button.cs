@@ -16,6 +16,11 @@ public class Button : MonoBehaviour
     public bool wasHighlighted;
 
 
+    // Storage \\
+
+    private SpriteRenderer spriteRenderer;
+
+
     // Exposed \\
 
     public Collider2D GetCollider ()
@@ -31,6 +36,15 @@ public class Button : MonoBehaviour
 
     // Triggers \\
 
+    void Awake()
+    {
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null && normalSprite != null)
+        {
+            spriteRenderer.sprite = normalSprite;
+        }
+    }
+
     void Update()
     {
         HandleHighlighting();
@@ -41,22 +55,25 @@ public class Button : MonoBehaviour
 
     private void HandleHighlighting ()
     {
-        Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y) * Manager.PIX_TO_UNI;
-        bool highlight = OverlapsPoint(mousePos) && !Input.GetMouseButton(0);
-
-        if (highlight != wasHighlighted)
+        if (spriteRenderer != null)
         {
-            if (highlight)
-            {
-                gameObject.GetComponent<SpriteRenderer>().sprite = highlightSprite;
-            }
-            else
-            {
-                gameObject.GetComponent<SpriteRenderer>().sprite = normalSprite;
-            }
+            Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y) * Manager.PIX_TO_UNI;
+            bool highlight = OverlapsPoint(mousePos) && !Input.GetMouseButton(0);
 
-            // update for next frame
-            wasHighlighted = highlight;
+            if (highlight != wasHighlighted)
+            {
+                if (highlight)
+                {
+                    spriteRenderer.sprite = highlightSprite;
+                }
+                else
+                {
+                    spriteRenderer.sprite = normalSprite;
+                }
+
+                // update for next frame
+                wasHighlighted = highlight;
+            }
         }
     }
 

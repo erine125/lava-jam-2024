@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c1a61145785894b08aac7dd02ee07213
+guid: 8c30b4ee7e18244c5a7098722e6c786d
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Caveat
+  - Pixeloid Sans
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
