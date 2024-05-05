@@ -19,11 +19,17 @@ public class Manager : MonoBehaviour
     public PantryParent pantryParent;
     public NarrateParent narrateParent;
 
+    [Header("Assets")]
+    public TextAsset dishTsv;
+    public TextAsset ingredientTsv;
+    public Sprite[] dishSprites, ingredientSprites; // must be same order as the TSV file
+
 
     // Shared State \\
 
     [HideInInspector] public int currentRound = 1;
     [HideInInspector] public float fadeMultiplier = 0f; // 0 to start, but 1 is default after that
+    [HideInInspector] public Dish chosenDish;
 
 
     // Storage \\
@@ -34,6 +40,9 @@ public class Manager : MonoBehaviour
 
     private bool mouseWasPressed;
 
+    [HideInInspector] public Dictionary<string, Dish> dishes;
+    [HideInInspector] public Dictionary<string, Ingredient> ingredients;
+
 
     // Triggers \\
 
@@ -42,6 +51,8 @@ public class Manager : MonoBehaviour
         activeButtons = new List<Button>();
         currentRound = 1;
         tintEffect = gameObject.GetComponent<PostEffect>();
+
+        LoadDishesAndIngredients();
 
         InitializeParents();
         ChooseActiveParent(Parent.Type.TITLE);
@@ -57,7 +68,6 @@ public class Manager : MonoBehaviour
 
     public void ChooseActiveParent (Parent.Type parent)
     {
-        // set the correct active parent
         titleParent.gameObject.SetActive(parent == Parent.Type.TITLE);
         kitchenParent.gameObject.SetActive(parent == Parent.Type.KITCHEN);
         pantryParent.gameObject.SetActive(parent == Parent.Type.PANTRY);
@@ -82,7 +92,11 @@ public class Manager : MonoBehaviour
                 break;
         }
 
-        // find all button objects
+        RefreshButtons();
+    }
+
+    public void RefreshButtons ()
+    {
         activeButtons.Clear();
         GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
         foreach (GameObject go in allObjects)
@@ -142,6 +156,27 @@ public class Manager : MonoBehaviour
         }
 
         mouseWasPressed = mousePressed;
+    }
+
+    private void LoadDishesAndIngredients ()
+    {
+        dishes = new Dictionary<string, Dish>();
+        string[] dishLines = dishTsv.text.Split('\n');
+        for (int i = 1; i < dishLines.Length; i++)
+        {  
+            Dish dish = Dish.CreateFromLine(dishLines[i]);
+            dish.sprite = dishSprites[i-1];
+            dishes.Add(dish.filename.Trim(), dish);
+        }
+
+        ingredients = new Dictionary<string, Ingredient>();
+        string[] ingLines = ingredientTsv.text.Split('\n');
+        for (int i = 1; i < ingLines.Length; i++)
+        {
+            Ingredient ing = Ingredient.CreateFromLine(ingLines[i]);
+            ing.sprite = ingredientSprites[i - 1];
+            ingredients.Add(ing.filename.Trim(), ing);
+        }
     }
 
 }

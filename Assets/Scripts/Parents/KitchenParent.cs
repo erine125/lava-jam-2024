@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 using TMPro;
 using UnityEngine;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class KitchenParent : Parent
 {
@@ -18,6 +18,9 @@ public class KitchenParent : Parent
     private TextMeshProUGUI dishNameText, dishFlavorText, dishSepText, recipeListText,
         recipeFlavorText, recipeBeginText;
     private Button envelopeLeft, envelopeRight, recipePaper;
+    private SpriteRenderer[] listedIngredients;
+
+    private Dish optionLeft, optionRight;
 
 
     // Triggers \\
@@ -41,6 +44,12 @@ public class KitchenParent : Parent
         recipeListText = GameObject.Find("KitRecipeListText").GetComponent<TextMeshProUGUI>();
         recipeFlavorText = GameObject.Find("KitRecipeFlavorText").GetComponent<TextMeshProUGUI>();
         recipeBeginText = GameObject.Find("KitRecipeBeginText").GetComponent<TextMeshProUGUI>();
+
+        listedIngredients = new SpriteRenderer[4];
+        for (int i = 0; i < listedIngredients.Length; i++)
+        {
+            listedIngredients[i] = GameObject.Find("KitListed" + (i+1)).GetComponent<SpriteRenderer>();
+        }
     }
 
     public override void Begin()
@@ -50,9 +59,14 @@ public class KitchenParent : Parent
         recipePaper.gameObject.SetActive(false);
         envelopeLeft.gameObject.SetActive(activity == Activity.RECIPE);
         envelopeRight.gameObject.SetActive(activity == Activity.RECIPE);
+        foreach (SpriteRenderer sr in listedIngredients)
+        {
+            sr.sprite = null;
+        }
 
         if (activity == Activity.RECIPE)
         {
+            ChooseDishes();
             GetTintOverlay().color = new Color(0, 0, 0, 0.92f);   
         }
         ChooseText();
@@ -74,12 +88,9 @@ public class KitchenParent : Parent
 
                 // pull up recipe
                 recipePaper.gameObject.SetActive(true);
-                dishNameText.text = "Dish Name";
-                dishFlavorText.text = "Dish flavor text goes here, a long and beautiful story to be sure.";
-                dishSepText.text = "INGREDIENTS";
-                recipeListText.text = "First thing\nOther thing\nAnother thing\nLast thing";
-                recipeFlavorText.text = "Lorem ipsum\n\n\n\nLorem ipsum\n\n\n\nLorem ipsum\n\n\n\nLorem ipsum";
-                recipeBeginText.text = "(Click to Begin)";
+                manager.chosenDish = (message == "EnvelopeLeft" ? optionLeft : optionRight);
+                UpdateRecipeUi();
+                manager.RefreshButtons();
             }
             else if (message == "RecipePaper")
             {
@@ -126,6 +137,51 @@ public class KitchenParent : Parent
         else
         {
             // TODO
+        }
+    }
+
+    private void ChooseDishes ()
+    {
+        optionLeft = null;
+        optionRight = null;
+
+        foreach (KeyValuePair<string, Dish> entry in manager.dishes)
+        {
+            if ((int) entry.Value.course == manager.currentRound)
+            {
+                if (optionLeft == null)
+                {
+                    optionLeft = entry.Value;
+                }
+                else
+                {
+                    optionRight = entry.Value;
+                    break;
+                }
+            }
+        }
+    }
+
+    private void UpdateRecipeUi ()
+    {
+        Dish d = manager.chosenDish;
+
+        dishNameText.text = d.displayName;
+        dishFlavorText.text = d.flavorText;
+        dishSepText.text = "INGREDIENTS";
+        recipeBeginText.text = "(Click to Begin)";
+
+        recipeListText.text = "";
+        recipeFlavorText.text = "";
+
+        for (int i = 0; i < d.ingredients.Length; i++)
+        {
+            string dishIng = d.ingredients[i];
+            Ingredient objIng = manager.ingredients[dishIng];
+
+            recipeListText.text += objIng.displayName + "\n";
+            recipeFlavorText.text += objIng.flavorText + "\n\n\n\n";
+            listedIngredients[i].sprite = objIng.sprite;
         }
     }
 

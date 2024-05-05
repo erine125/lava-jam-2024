@@ -1,0 +1,17 @@
+FILENAME	FLAVOR
+lavacap-shroom	This edible mushroom can be foraged all over the local volcanic caves and is a popular choice for nutritious cooking. 
+lavacado	Contrary to popular belief, this fleshy fruit is not in the same plant family as the avocado tree.
+green-tendril	There’s an old legend that these wriggling tendrils are the appendages of a cave-dwelling kraken. In reality, they’re simply tentacle-like vines.
+purple-tendril	A naturally occurring variant of the green tendril, with a slightly milder taste.
+oober-tuber	This starchy root vegetable is often used as a yam or sweet potato substitute in Volcanic cuisine. Children especially love it baked.
+meat-quartz	This meat-like rock is surprisingly tender when slow-cooked in broth, but is not for those with a weak tummy.
+dino-egg	Just one of these large eggs can be substituted for two or three chicken eggs in any cake or cookie recipe.
+ancient-magma-fish	Also called the ‘gem of the cavern’, these long-living, three-eyed fish and their glowing scales have attracted many a tourist to the local caves.
+spiny-crinklefly	Commonly known as the ‘land lobster’, this spiny critter’s meat is perfect for pan-frying with butter. 
+volcanic-rock-salt	Compared to common table salt, this special rock salt delivers an earthy flavor and is said to have health benefits.
+lavasquid-ink	Lavasquids expel this ink as a form of protection. It has a rich, spicy flavor.
+hot-cocoa-bean	The inside of these beans taste just like sweet hot cocoa. They’re commonly used in drinks and desserts.
+fire-fern	This exotic herb fetches high prices at any market, but is best freshly picked from a lava cave.
+sweet-cave-crystal	These naturally-forming sugar crystals are beloved by children and, when collected fresh, make excellent specialty gifts.
+pyroconut	It is one of the few trees that can withstand the temperature of volcanic caves. The fruit takes its name from its fiery red husk and spicy tang.
+scorch-root-seed	This spice is ground from the seed of the scorch root, which grows on cave roofs and falls when ripe. The seeds can also be eaten like nuts.
