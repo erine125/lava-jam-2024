@@ -336,7 +336,6 @@ public class KitchenParent : Parent
                 break;
             }
         }
-        wasCorrect = true; // TODO - REMOVE THIS, DEBUG ONLY
 
         // leave the kitchen
         manager.narrateParent.page = wasCorrect ?
