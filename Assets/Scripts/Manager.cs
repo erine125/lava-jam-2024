@@ -59,6 +59,7 @@ public class Manager : MonoBehaviour
 
         InitializeParents();
         ChooseActiveParent(Parent.Type.TITLE);
+
     }
 
     void Update()
@@ -140,8 +141,8 @@ public class Manager : MonoBehaviour
     private void HandleMouseInput ()
     {
         bool mousePressed = Input.GetMouseButton(0);
-        Vector2 point = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        point *= PIX_TO_UNI;
+        Vector2 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        // point *= PIX_TO_UNI;
 
         if (!mousePressed && mouseWasPressed)
         {

@@ -168,7 +168,7 @@ public class Player : MonoBehaviour
 
     private void PollDashInput ()
     {
-        if (Input.GetKey(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X))
         {
             switch (facing)
             {
