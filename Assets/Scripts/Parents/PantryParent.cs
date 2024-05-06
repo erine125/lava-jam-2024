@@ -2,9 +2,6 @@ using System.Linq;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEditor.VersionControl;
-using static UnityEditor.PlayerSettings;
-using UnityEditor.Sprites;
 
 public class PantryParent : Parent
 {
