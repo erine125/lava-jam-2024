@@ -15,6 +15,9 @@ public class KitchenParent : Parent
 
     public Sprite[] potFrames;
 
+    public AudioSource audioSource; 
+    public AudioClip dropInPotSound; 
+
 
     // Storage \\
 
@@ -133,6 +136,7 @@ public class KitchenParent : Parent
             }
             else if (message == "PanItem1")
             {
+                audioSource.PlayOneShot(dropInPotSound, 0.5f);
                 ingredientsInPot += 1;
                 availableIngredients[0] = null;
                 itemSprites[0].sprite = null;
@@ -140,6 +144,7 @@ public class KitchenParent : Parent
             }
             else if (message == "PanItem2")
             {
+                audioSource.PlayOneShot(dropInPotSound, 0.5f);
                 ingredientsInPot += 1;
                 availableIngredients[1] = null;
                 itemSprites[1].sprite = null;
@@ -147,6 +152,7 @@ public class KitchenParent : Parent
             }
             else if (message == "PanItem3")
             {
+                audioSource.PlayOneShot(dropInPotSound, 0.5f);
                 ingredientsInPot += 1;
                 availableIngredients[2] = null;
                 itemSprites[2].sprite = null;
@@ -154,6 +160,7 @@ public class KitchenParent : Parent
             }
             else if (message == "PanItem4")
             {
+                audioSource.PlayOneShot(dropInPotSound, 0.5f);
                 ingredientsInPot += 1;
                 availableIngredients[3] = null;
                 itemSprites[3].sprite = null;

@@ -8,7 +8,7 @@ public class NarrateParent : Parent
 
     // Parameters \\
 
-    public Sprite SplashReading, SplashReadingCrying;
+    public Sprite SplashReading, SplashReadingCrying, HatStand, HatStandDead;
 
 
     // Storage \\
@@ -85,6 +85,12 @@ public class NarrateParent : Parent
                 break;
             case Page.DISH_FAIL:
                 splashSprite.sprite = SplashReadingCrying;
+                break;
+            case Page.DIED_LAVA: 
+                splashSprite.sprite = HatStand;
+                break;
+            case Page.DIED_ERUPT:
+                splashSprite.sprite = HatStandDead;
                 break;
             default:
                 splashSprite.sprite = null;

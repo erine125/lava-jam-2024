@@ -15,6 +15,9 @@ public class PantryParent : Parent
     public TextAsset tilemapCsv;
     public float timeAllowed = 31f;
 
+    public AudioSource audioSource; 
+    public AudioClip pickupSound;
+
 
     // State \\
 
@@ -275,6 +278,10 @@ public class PantryParent : Parent
                 collectibleLocations.RemoveAt(index);
                 collectibleObjects.RemoveAt(index);
                 collectibleIngredients.RemoveAt(index);
+
+                // play pickup audio
+                audioSource.PlayOneShot(pickupSound, 0.5f);
+                
             }
         }
     }
