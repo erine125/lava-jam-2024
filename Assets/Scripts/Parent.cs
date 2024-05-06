@@ -163,6 +163,7 @@ public abstract class Parent : MonoBehaviour
             {
                 FindAllTextMeshes();
 
+                parent.manager.fadeMultiplier = speedMult;
                 if (speedMult == 0)
                 {
                     parent.manager.UpdateTintEffect(0);
@@ -174,7 +175,6 @@ public abstract class Parent : MonoBehaviour
                     fadingTimer = 0;
                     transitionType = type;
                     loadingIn = false;
-                    parent.manager.fadeMultiplier = speedMult;
                 }
             }
         }
