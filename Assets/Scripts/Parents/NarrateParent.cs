@@ -138,11 +138,13 @@ Oh well, at least you went out doing what you loved. Maybe your twin brother can
                 titleText.text = "YOU WERE ELIMINATED";
                 rightText.text = @"Dearest Contestant,
 
-    We regret to inform you that your dish did not meet our culinary standards here at SuperChef International. In fact, one of our judges had to be rushed to the hospital and is currently recovering. In light of this, you will unfortunately NOT be moving on to the next round of our competition. 
-    Good luck with your future endeavors.
+We regret to inform you that your dish did not meet our culinary standards here at SuperChef International. In fact, one of our judges had to be rushed to the hospital and is currently recovering. In light of this, you will unfortunately NOT be moving on to the next round of our competition. 
+
+Good luck with your future endeavors.
 
 Yours fearfully,
-     SuperChef International Committee";
+
+SuperChef International Committee";
                 dishText.text = "";
                 contText.text = "(Click to Return Home)";
                 break;

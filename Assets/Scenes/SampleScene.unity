@@ -1175,7 +1175,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e722edd8887e54543a14f847c2a23808, type: 3}
   - {fileID: 21300000, guid: baf3d984207c849dabb9cb652f434d4e, type: 3}
   OscillatePerSecond: 6
-  BasePotShakeTime: 0.8
+  BasePotShakeTime: 0.7
   potFrames:
   - {fileID: 21300000, guid: 129eb31f4a12f4c20bfade7219a7e231, type: 3}
   - {fileID: 21300000, guid: b5173014425d941f98a3324f59cbd23d, type: 3}
