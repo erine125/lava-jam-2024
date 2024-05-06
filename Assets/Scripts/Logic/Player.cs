@@ -57,12 +57,12 @@ public class Player : MonoBehaviour
             PollDashInput();
         }
 
+        CheckBoundsAndLeave();
+
         if (IsMoving() && state != State.DYING && state != State.LEAVING)
         {
             MoveTowardsTarget();
         }
-
-        CheckBoundsAndLeave();
 
         transform.position = new Vector3(PantryParent.GridSquareSize * pos.x, PantryParent.GridSquareSize * pos.y, 0);
         UpdateSprite();
@@ -243,7 +243,10 @@ public class Player : MonoBehaviour
             target.Set(pos.x, pos.y);
             source.Set(pos.x, pos.y);
             state = State.STAND;
-            parent.PlayerLeave();
+            if (parent.manager.heldIngredients.Count > 0)
+            {
+                parent.PlayerLeave();
+            }
         }
     }
 

@@ -9,7 +9,8 @@ public class PantryParent : Parent
     // Parameters \\
 
     public Sprite[] backgroundFrames;
-    public float OscillatePerSecond;
+    public Sprite[] foregroundFrames;
+    public float oscillatePerSec = 2f;
     public static float GridSquareSize = 0.4444f;
     public Vector2 GridAnchor = new Vector2(-8.889f, -4.8884f); // player centered of bottom left tile
     public TextAsset tilemapCsv;
@@ -35,6 +36,7 @@ public class PantryParent : Parent
     // Storage \\
 
     private TextMeshProUGUI timerText;
+    private SpriteRenderer foregroundRenderer;
 
     private List<Vector2> collectibleLocations;
     private List<GameObject> collectibleObjects; // these two must be matching order
@@ -55,6 +57,7 @@ public class PantryParent : Parent
 
         player = GameObject.Find("PlayerChar").GetComponent<Player>();
         timerText = GameObject.Find("PanTimerText").GetComponent<TextMeshProUGUI>();
+        foregroundRenderer = GameObject.Find("PanForeSprite").GetComponent<SpriteRenderer>();
     }
 
     public override void Begin()
@@ -122,10 +125,11 @@ public class PantryParent : Parent
     {
         timeSinceOsc += Time.deltaTime;
 
-        if (timeSinceOsc >= 1f / OscillatePerSecond)
+        if (timeSinceOsc >= 1f / oscillatePerSec)
         {
-            oscillateFrame = (oscillateFrame + 1) % 12;
-            GetBackground().sprite = backgroundFrames[oscillateFrame];
+            oscillateFrame++;
+            GetBackground().sprite = backgroundFrames[oscillateFrame % 12];
+            foregroundRenderer.sprite = foregroundFrames[oscillateFrame % 4];
             timeSinceOsc = 0;
         }
     }
