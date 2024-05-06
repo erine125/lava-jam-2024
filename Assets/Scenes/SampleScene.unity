@@ -4611,6 +4611,8 @@ MonoBehaviour:
   timeAllowed: 31
   audioSource: {fileID: 1614315969}
   pickupSound: {fileID: 8300000, guid: 3297f425733bc074aa8453cc45abb494, type: 3}
+  shadowSprite: {fileID: 21300000, guid: 8dcafff65dea3442c949b74fe25ec4d9, type: 3}
+  shadowOffset: {x: 0, y: -0.24}
 --- !u!82 &1614315969
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5520,7 +5522,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: eb82abf5ea130442dad13e81d801afdd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

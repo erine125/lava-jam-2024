@@ -19,6 +19,9 @@ public class PantryParent : Parent
     public AudioSource audioSource; 
     public AudioClip pickupSound;
 
+    public Sprite shadowSprite;
+    public Vector2 shadowOffset = Vector2.zero;
+
 
     // State \\
 
@@ -39,7 +42,7 @@ public class PantryParent : Parent
     private SpriteRenderer foregroundRenderer;
 
     private List<Vector2> collectibleLocations; // these three must be matching order
-    private List<GameObject> collectibleObjects;
+    private List<GameObject> collectibleObjects, collectibleShadows;
     private List<Ingredient> collectibleIngredients;
 
 
@@ -51,6 +54,7 @@ public class PantryParent : Parent
 
         collectibleLocations = new List<Vector2>();
         collectibleObjects = new List<GameObject>();
+        collectibleShadows = new List<GameObject>();
         collectibleIngredients = new List<Ingredient>();
 
         LoadTiles();
@@ -243,13 +247,7 @@ public class PantryParent : Parent
             // create
             Ingredient picked = manager.ingredients[name];
             collectibleIngredients.Add(picked);
-            GameObject go = new GameObject("KitGroundIngredient" + nameNum);
-            go.transform.parent = gameObject.transform;
-            go.AddComponent<SpriteRenderer>();
-            go.GetComponent<SpriteRenderer>().sprite = picked.sprite;
-            go.transform.localScale = new Vector3(10, 10);
-            go.transform.position = new Vector3(GridSquareSize * pos.x, GridSquareSize * pos.y, 0);
-            collectibleObjects.Add(go);
+            AddIngredientSprite("KitGroundIngredient" + nameNum, picked, pos);
         }     
     }
 
@@ -259,7 +257,12 @@ public class PantryParent : Parent
         {
             GameObject.Destroy(go);
         }
+        foreach (GameObject go in collectibleShadows)
+        {
+            GameObject.Destroy(go);
+        }
         collectibleObjects.Clear();
+        collectibleShadows.Clear();
         collectibleIngredients.Clear();
         collectibleLocations.Clear();
     }
@@ -290,8 +293,10 @@ public class PantryParent : Parent
 
                 // remove it from the view
                 Destroy(collectibleObjects[index]);
+                Destroy(collectibleShadows[index]);
                 collectibleLocations.RemoveAt(index);
                 collectibleObjects.RemoveAt(index);
+                collectibleShadows.RemoveAt(index);
                 collectibleIngredients.RemoveAt(index);
 
                 // play pickup audio
@@ -309,18 +314,33 @@ public class PantryParent : Parent
             collectibleIngredients.Add(ing);
             Vector2 pos = new Vector2(player.pos.x, player.pos.y);
             collectibleLocations.Add(pos);
-            GameObject go = new GameObject("KitGroundIngredientDropped");
-            go.transform.parent = gameObject.transform;
-            go.AddComponent<SpriteRenderer>();
-            go.GetComponent<SpriteRenderer>().sprite = ing.sprite;
-            go.transform.localScale = new Vector3(10, 10);
-            go.transform.position = new Vector3(GridSquareSize * pos.x, GridSquareSize * pos.y, 0);
-            collectibleObjects.Add(go);
+            AddIngredientSprite("KitGroundIngredientDropped", ing, pos);
 
             // remove it from being held
             manager.heldIngredients[index] = null;
             itemSprites[index].sprite = null;
         }
+    }
+
+    private void AddIngredientSprite (string gameObjectName, Ingredient ingredient, Vector2 position)
+    {
+        GameObject go = new GameObject(gameObjectName);
+        go.transform.parent = gameObject.transform;
+        go.AddComponent<SpriteRenderer>();
+        go.GetComponent<SpriteRenderer>().sprite = ingredient.sprite;
+        go.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        go.transform.localScale = new Vector3(10, 10);
+        go.transform.position = new Vector3(GridSquareSize * position.x, GridSquareSize * position.y, 0);
+        collectibleObjects.Add(go);
+
+        GameObject gos = new GameObject(gameObjectName + "Shadow");
+        gos.transform.parent = gameObject.transform;
+        gos.AddComponent<SpriteRenderer>();
+        gos.GetComponent<SpriteRenderer>().sprite = shadowSprite;
+        gos.transform.localScale = new Vector3(10, 10);
+        gos.transform.position = new Vector3(GridSquareSize * position.x + shadowOffset.x,
+            GridSquareSize * position.y + shadowOffset.y, 0);
+        collectibleShadows.Add(gos);
     }
 
 
