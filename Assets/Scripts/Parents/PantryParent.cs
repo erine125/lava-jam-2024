@@ -2,6 +2,9 @@ using System.Linq;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEditor.VersionControl;
+using static UnityEditor.PlayerSettings;
+using UnityEditor.Sprites;
 
 public class PantryParent : Parent
 {
@@ -38,8 +41,8 @@ public class PantryParent : Parent
     private TextMeshProUGUI timerText;
     private SpriteRenderer foregroundRenderer;
 
-    private List<Vector2> collectibleLocations;
-    private List<GameObject> collectibleObjects; // these two must be matching order
+    private List<Vector2> collectibleLocations; // these three must be matching order
+    private List<GameObject> collectibleObjects;
     private List<Ingredient> collectibleIngredients;
 
 
@@ -64,7 +67,7 @@ public class PantryParent : Parent
     {
         base.Begin();
 
-        manager.heldIngredients.Clear();
+        manager.RemoveAllHeldIngredients();
         DistributeCollectibles();
         itemFrame.SetActive(true);
         timeRemaining = timeAllowed;
@@ -95,6 +98,17 @@ public class PantryParent : Parent
         base.DoneFadingOut();
 
         RemoveAllCollectibles();
+    }
+
+    public override void InputButton(string message)
+    {
+        if (!transition.IsTransitioning ())
+        {
+            if (message.Substring(0, 7) == "PanItem")
+            {
+                HandleDropping(System.Int32.Parse(message.Substring(7, 1)) - 1);
+            }   
+        }
     }
 
 
@@ -178,7 +192,7 @@ public class PantryParent : Parent
     private void UpdateTimer ()
     {
         // cosmetic
-        string stringForm = Mathf.FloorToInt(timeRemaining).ToString();
+        string stringForm = Mathf.FloorToInt(Mathf.Max(timeRemaining, 0)).ToString();
         stringForm = (stringForm.Length < 2) ? "0:0" + stringForm : "0:" + stringForm;
         timerText.text = stringForm;
 
@@ -255,7 +269,7 @@ public class PantryParent : Parent
 
     private void HandlePickup ()
     {
-        if (Input.GetKeyDown(KeyCode.C) && manager.heldIngredients.Count < 4)
+        if (Input.GetKeyDown(KeyCode.C) && manager.CountHeldIngredients () < 4)
         {
             // find closest valid ingredient index
             int index = -1;
@@ -264,7 +278,7 @@ public class PantryParent : Parent
             {
                 Vector2 pos = collectibleLocations[i];
 
-                float d = Mathf.Sqrt(Mathf.Pow(pos.x - player.pos.x, 2) + Mathf.Pow(pos.y - player.pos.y, 2));
+                float d = Mathf.Sqrt(Mathf.Pow((pos.x - 0.5f) - player.pos.x, 2) + Mathf.Pow(pos.y - player.pos.y, 2));
                 if (d <= dst)
                 {
                     index = i;
@@ -274,8 +288,8 @@ public class PantryParent : Parent
             // pickup item
             if (index != -1)
             {
-                manager.heldIngredients.Add(collectibleIngredients[index]);
-                itemSprites[manager.heldIngredients.Count - 1].sprite = collectibleIngredients[index].sprite;
+                int idx = manager.AddToHeldIngredients(collectibleIngredients[index]);
+                itemSprites[idx].sprite = collectibleIngredients[index].sprite;
 
                 // remove it from the view
                 Destroy(collectibleObjects[index]);
@@ -284,9 +298,31 @@ public class PantryParent : Parent
                 collectibleIngredients.RemoveAt(index);
 
                 // play pickup audio
-                audioSource.PlayOneShot(pickupSound, 0.5f);
-                
+                audioSource.PlayOneShot(pickupSound, 0.5f);      
             }
+        }
+    }
+
+    private void HandleDropping (int index)
+    {
+        if (manager.heldIngredients[index] != null)
+        {
+            // re-add it to the ground
+            Ingredient ing = manager.heldIngredients[index];
+            collectibleIngredients.Add(ing);
+            Vector2 pos = new Vector2(player.pos.x, player.pos.y);
+            collectibleLocations.Add(pos);
+            GameObject go = new GameObject("KitGroundIngredientDropped");
+            go.transform.parent = gameObject.transform;
+            go.AddComponent<SpriteRenderer>();
+            go.GetComponent<SpriteRenderer>().sprite = ing.sprite;
+            go.transform.localScale = new Vector3(10, 10);
+            go.transform.position = new Vector3(GridSquareSize * pos.x, GridSquareSize * pos.y, 0);
+            collectibleObjects.Add(go);
+
+            // remove it from being held
+            manager.heldIngredients[index] = null;
+            itemSprites[index].sprite = null;
         }
     }
 

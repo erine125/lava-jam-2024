@@ -243,7 +243,7 @@ public class Player : MonoBehaviour
             target.Set(pos.x, pos.y);
             source.Set(pos.x, pos.y);
             state = State.STAND;
-            if (parent.manager.heldIngredients.Count > 0)
+            if (parent.manager.CountHeldIngredients () > 0)
             {
                 parent.PlayerLeave();
             }

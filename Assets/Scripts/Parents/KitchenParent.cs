@@ -45,6 +45,8 @@ public class KitchenParent : Parent
 
     private Ingredient[] availableIngredients;
 
+    private List<Ingredient> addedIngredients;
+
 
     // Triggers \\
 
@@ -70,6 +72,9 @@ public class KitchenParent : Parent
 
         cookInstructText = GameObject.Find("KitInstructionText").GetComponent<TextMeshProUGUI>();
         potRender = GameObject.Find("KitPot").GetComponent<SpriteRenderer>();
+
+        addedIngredients = new List<Ingredient>();
+        availableIngredients = new Ingredient[4];
 
         listedIngredients = new SpriteRenderer[4];
         for (int i = 0; i < listedIngredients.Length; i++)
@@ -104,6 +109,7 @@ public class KitchenParent : Parent
         }
         else if (activity == Activity.COOKING)
         {
+            addedIngredients.Clear();
             PrepareIngredients();
             potRender.sprite = potFrames[1];
         }
@@ -138,6 +144,7 @@ public class KitchenParent : Parent
             {
                 audioSource.PlayOneShot(dropInPotSound, 0.5f);
                 ingredientsInPot += 1;
+                addedIngredients.Add(availableIngredients[0]);
                 availableIngredients[0] = null;
                 itemSprites[0].sprite = null;
                 CheckDoneCooking();
@@ -146,6 +153,7 @@ public class KitchenParent : Parent
             {
                 audioSource.PlayOneShot(dropInPotSound, 0.5f);
                 ingredientsInPot += 1;
+                addedIngredients.Add(availableIngredients[1]);
                 availableIngredients[1] = null;
                 itemSprites[1].sprite = null;
                 CheckDoneCooking();
@@ -154,6 +162,7 @@ public class KitchenParent : Parent
             {
                 audioSource.PlayOneShot(dropInPotSound, 0.5f);
                 ingredientsInPot += 1;
+                addedIngredients.Add(availableIngredients[2]);
                 availableIngredients[2] = null;
                 itemSprites[2].sprite = null;
                 CheckDoneCooking();
@@ -162,6 +171,7 @@ public class KitchenParent : Parent
             {
                 audioSource.PlayOneShot(dropInPotSound, 0.5f);
                 ingredientsInPot += 1;
+                addedIngredients.Add(availableIngredients[3]);
                 availableIngredients[3] = null;
                 itemSprites[3].sprite = null;
                 CheckDoneCooking();
@@ -293,10 +303,9 @@ public class KitchenParent : Parent
 
     private void PrepareIngredients ()
     {
-        availableIngredients = manager.heldIngredients.ToArray ();
-
         for (int i = 0; i < availableIngredients.Length; i++)
         {
+            availableIngredients[i] = manager.heldIngredients[i];
             if (availableIngredients[i] != null)
             {
                 itemSprites[i].sprite = availableIngredients[i].sprite;
@@ -308,11 +317,13 @@ public class KitchenParent : Parent
 
     private void CheckDoneCooking()
     {
+        bool haveUsedAllIngredients = true;
         for (int i = 0; i < availableIngredients.Length; i++)
         {
             if (availableIngredients[i] != null)
             {
-                return;
+                haveUsedAllIngredients = false;
+                break;
             }
         }
 
@@ -321,9 +332,9 @@ public class KitchenParent : Parent
         foreach (string shouldHave in manager.chosenDish.ingredients)
         {
             bool found = false;
-            foreach (Ingredient actuallyHas in manager.heldIngredients)
+            foreach (Ingredient added in addedIngredients)
             {
-                if (shouldHave == actuallyHas.filename)
+                if (shouldHave == added.filename)
                 {
                     found = true;
                     break;
@@ -338,9 +349,12 @@ public class KitchenParent : Parent
         }
 
         // leave the kitchen
-        manager.narrateParent.page = wasCorrect ?
-            NarrateParent.Page.DISH_SUCCESS : NarrateParent.Page.DISH_FAIL;
-        transition.StartLoadingOut(Type.NARRATE, 0.2f);
+        if (wasCorrect || haveUsedAllIngredients)
+        {
+            manager.narrateParent.page = wasCorrect ?
+                NarrateParent.Page.DISH_SUCCESS : NarrateParent.Page.DISH_FAIL;
+            transition.StartLoadingOut(Type.NARRATE, 0.2f);
+        }
     }
 
 

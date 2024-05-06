@@ -31,7 +31,7 @@ public class Manager : MonoBehaviour
     [HideInInspector] public int currentRound = 1;
     [HideInInspector] public float fadeMultiplier = 0f; // 0 to start, but 1 is default after that
     [HideInInspector] public Dish chosenDish;
-    [HideInInspector] public List<Ingredient> heldIngredients;
+    [HideInInspector] public Ingredient[] heldIngredients;
 
 
     // Storage \\
@@ -55,7 +55,7 @@ public class Manager : MonoBehaviour
         tintEffect = gameObject.GetComponent<PostEffect>();
 
         LoadDishesAndIngredients();
-        heldIngredients = new List<Ingredient>();
+        heldIngredients = new Ingredient[4];
 
         InitializeParents();
         ChooseActiveParent(Parent.Type.TITLE);
@@ -124,6 +124,35 @@ public class Manager : MonoBehaviour
     public void UpdateTintEffect (float strength)
     {
         tintEffect.material.SetFloat("_Strength", strength);
+    }
+
+    public int CountHeldIngredients ()
+    {
+        int ct = 0;
+        for (int i = 0; i < heldIngredients.Length; i++)
+        {
+            ct += (heldIngredients[i] == null) ? 0 : 1;
+        }
+        return ct;
+    }
+    public void RemoveAllHeldIngredients ()
+    {
+        for (int i = 0; i < heldIngredients.Length; i++)
+        {
+            heldIngredients[i] = null;
+        }
+    }
+    public int AddToHeldIngredients (Ingredient ingredient)
+    {
+        for (int i = 0; i < heldIngredients.Length; i++)
+        {
+            if (heldIngredients[i] == null)
+            {
+                heldIngredients[i] = ingredient;
+                return i;
+            }
+        }
+        return -1;
     }
 
 
