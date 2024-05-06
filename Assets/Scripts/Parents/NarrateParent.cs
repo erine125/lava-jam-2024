@@ -174,6 +174,7 @@ Our judges were moved to tears by the love, care, and overwhelming spiciness in 
 Yours tearfully,
 
 SuperChef International Committee";
+                    dishText.text = manager.chosenDish.displayName;
                     contText.text = "(Click to Advance)";
                 }
                 else if (manager.currentRound == 3)
@@ -190,6 +191,7 @@ Please find your Super Chef certificate enclosed. Our partnership agreement will
 Congratulations! 
 
 SuperChef International Committee";
+                    dishText.text = manager.chosenDish.displayName;
                     contText.text = "(Click to Return Home)";
                 }
                 break;

@@ -2079,9 +2079,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19252d6dffe8945a2b11f85df7f3f25a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeOutMultiplier: 4
+  fadeOutMultiplier: 3
   fadeInMultiplier: 4
-  pauseBlackOnFade: 0
+  pauseBlackOnFade: 0.25
   titleParent: {fileID: 2075473746}
   rulesParent: {fileID: 44281093}
   kitchenParent: {fileID: 215645779}
@@ -2093,7 +2093,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b76b30c84cbe843ab9e733e7bd7dc6a5, type: 3}
   - {fileID: 21300000, guid: 711338fd9ef1f4c03a3ad8335d00392e, type: 3}
   - {fileID: 21300000, guid: 37da4517fc2ba47c5a6bbc06d761370f, type: 3}
-  - {fileID: 21300000, guid: 5f3ef879b2eac4276b333058df384bbd, type: 3}
+  - {fileID: 21300000, guid: d3b98780cb8154c43beeb52c181636ba, type: 3}
   - {fileID: 21300000, guid: 88090153ca64a4e30bd18c6c646be94b, type: 3}
   - {fileID: 21300000, guid: 59c06fe6518b847fbaa3312904a58ad9, type: 3}
   ingredientSprites:
