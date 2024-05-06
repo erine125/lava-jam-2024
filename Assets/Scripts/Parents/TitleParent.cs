@@ -15,6 +15,7 @@ public class TitleParent : Parent
             {
                 audioSource.PlayOneShot(startSound, 0.5f);
                 manager.narrateParent.page = NarrateParent.Page.INTRO;
+                manager.currentRound = 1;
                 transition.StartLoadingOut(Type.NARRATE);
             }
             else if (message == "Rules")
