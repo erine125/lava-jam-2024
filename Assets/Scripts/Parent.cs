@@ -136,40 +136,46 @@ public abstract class Parent : MonoBehaviour
 
         public void StartLoadingIn ()
         {
-            FindAllTextMeshes();
+            if (!IsTransitioning())
+            {
+                FindAllTextMeshes();
 
-            if (parent.manager.fadeMultiplier == 0)
-            {
-                parent.DoneFadingIn();
-                parent.manager.UpdateTintEffect(0);
-                TintTextMeshes(0);
-            }
-            else
-            {
-                delayTimer = 0;
-                fadingTimer = 0;
-                transitionType = Type.NONE;
-                loadingIn = true;
-                TintTextMeshes(1);
+                if (parent.manager.fadeMultiplier == 0)
+                {
+                    parent.DoneFadingIn();
+                    parent.manager.UpdateTintEffect(0);
+                    TintTextMeshes(0);
+                }
+                else
+                {
+                    delayTimer = 0;
+                    fadingTimer = 0;
+                    transitionType = Type.NONE;
+                    loadingIn = true;
+                    TintTextMeshes(1);
+                }
             }
         }
 
         public void StartLoadingOut (Parent.Type type, float speedMult = 1f)
         {
-            FindAllTextMeshes();
+            if (!IsTransitioning ())
+            {
+                FindAllTextMeshes();
 
-            if (speedMult == 0)
-            {
-                parent.manager.UpdateTintEffect(0);
-                parent.manager.ChooseActiveParent(type);
-            }
-            else
-            {
-                delayTimer = 0;
-                fadingTimer = 0;
-                transitionType = type;
-                loadingIn = false;
-                parent.manager.fadeMultiplier = speedMult;
+                if (speedMult == 0)
+                {
+                    parent.manager.UpdateTintEffect(0);
+                    parent.manager.ChooseActiveParent(type);
+                }
+                else
+                {
+                    delayTimer = 0;
+                    fadingTimer = 0;
+                    transitionType = type;
+                    loadingIn = false;
+                    parent.manager.fadeMultiplier = speedMult;
+                }
             }
         }
 
