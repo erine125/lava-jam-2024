@@ -47,6 +47,7 @@ public class Player : MonoBehaviour
         source.Set(pos.x, pos.y);
         target.Set(pos.x, pos.y);
         state = State.STAND;
+        transform.localScale = new Vector3(10, 10, 1);
     }
 
     void Update()

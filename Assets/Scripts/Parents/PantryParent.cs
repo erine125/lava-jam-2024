@@ -35,6 +35,8 @@ public class PantryParent : Parent
 
     private float timeRemaining;
 
+    private float playerShrinkingTimer;
+
 
     // Storage \\
 
@@ -72,6 +74,7 @@ public class PantryParent : Parent
         DistributeCollectibles();
         itemFrame.SetActive(true);
         timeRemaining = timeAllowed;
+        playerShrinkingTimer = 0;
 
         for (int i = 0; i < itemSprites.Length; i++)
         {
@@ -91,6 +94,10 @@ public class PantryParent : Parent
         {
             HandlePickup();
             UpdateTimer();
+        }
+        else if (player.state == Player.State.DYING)
+        {
+            HandlePlayerShrinking();
         }
     }
 
@@ -341,6 +348,13 @@ public class PantryParent : Parent
         gos.transform.position = new Vector3(GridSquareSize * position.x + shadowOffset.x,
             GridSquareSize * position.y + shadowOffset.y, 0);
         collectibleShadows.Add(gos);
+    }
+
+    private void HandlePlayerShrinking ()
+    {
+        playerShrinkingTimer += Time.deltaTime;
+        float amt = Mathf.Max(1f - playerShrinkingTimer / 1f, 0) * 10f;
+        player.gameObject.transform.localScale = new Vector3(amt, amt, 1);
     }
 
 
