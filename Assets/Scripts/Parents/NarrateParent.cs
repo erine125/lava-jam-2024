@@ -177,7 +177,7 @@ SuperChef International Committee";
                     titleText.text = "EXCELLENT JOB!";
                     rightText.text = @"Dearest Contestant, 
 
-What a performance! We are happy to inform you that you have qualified for the third and final round of MasterChef International! 
+What a performance! We are happy to inform you that you have qualified for the third and final round of SuperChef International! 
 
 Our judges were moved to tears by the love, care, and overwhelming spiciness in your dish. Congratulations, and good luck in the final round! 
 
