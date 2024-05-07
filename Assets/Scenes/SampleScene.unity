@@ -403,7 +403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 0}
-  backgroundSprite: {fileID: 21300000, guid: da02dcf7c5a770c4f91700725b6c18fe, type: 3}
+  backgroundSprite: {fileID: 21300000, guid: b4a680ff72e91814789ec676a17a7c3a, type: 3}
 --- !u!4 &44281094
 Transform:
   m_ObjectHideFlags: 0
@@ -1182,6 +1182,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b02ba0481d1254faeb99e014ca794415, type: 3}
   audioSource: {fileID: 215645780}
   dropInPotSound: {fileID: 8300000, guid: 93163b1200173464c8dd1f8c7310be24, type: 3}
+  musicSource: {fileID: 519420035}
 --- !u!82 &215645780
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1192,11 +1193,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
+  m_audioClip: {fileID: 8300000, guid: ed73b621b6d965b438e753b96ec4cace, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.574
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -1986,6 +1987,7 @@ GameObject:
   - component: {fileID: 519420029}
   - component: {fileID: 519420034}
   - component: {fileID: 519420033}
+  - component: {fileID: 519420035}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2128,6 +2130,102 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: 07ec2ef5ab9e14932b84e0e278261472, type: 2}
+--- !u!82 &519420035
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 32ecf9e2d82cec24a9499d1251cd2519, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.128
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &536547360
 GameObject:
   m_ObjectHideFlags: 0
@@ -3488,6 +3586,8 @@ MonoBehaviour:
   SplashReadingCrying: {fileID: 21300000, guid: 7373bfd339baa415a8176afe296a935a, type: 3}
   HatStand: {fileID: 21300000, guid: 2dd3068435baa0a438779b4317195e48, type: 3}
   HatStandDead: {fileID: 21300000, guid: 64143655451c62d41bdf914001fa73cf, type: 3}
+  musicSource: {fileID: 519420035}
+  narrateBGM: {fileID: 8300000, guid: 2868bd262fe7ef74b95b261b7f3df4d1, type: 3}
 --- !u!1 &1324252617
 GameObject:
   m_ObjectHideFlags: 0
@@ -4613,6 +4713,8 @@ MonoBehaviour:
   pickupSound: {fileID: 8300000, guid: 3297f425733bc074aa8453cc45abb494, type: 3}
   shadowSprite: {fileID: 21300000, guid: 8dcafff65dea3442c949b74fe25ec4d9, type: 3}
   shadowOffset: {x: 0, y: -0.24}
+  musicSource: {fileID: 519420035}
+  dungeonMusic: {fileID: 8300000, guid: 24cb8c4ee4f949d4cbbf0a9fd8663d83, type: 3}
 --- !u!82 &1614315969
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5924,6 +6026,8 @@ MonoBehaviour:
   backgroundSprite: {fileID: 21300000, guid: d18a860ba733449f5870aa40f6e9ab70, type: 3}
   audioSource: {fileID: 2075473747}
   startSound: {fileID: 8300000, guid: 488c4ac1fde0afa4cb10cdfc536f006f, type: 3}
+  musicSource: {fileID: 519420035}
+  menuMusic: {fileID: 8300000, guid: 32ecf9e2d82cec24a9499d1251cd2519, type: 3}
 --- !u!82 &2075473747
 AudioSource:
   m_ObjectHideFlags: 0

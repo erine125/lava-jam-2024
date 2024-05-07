@@ -9,6 +9,8 @@ public class NarrateParent : Parent
     // Parameters \\
 
     public Sprite SplashReading, SplashReadingCrying, HatStand, HatStandDead;
+    public AudioSource musicSource; 
+    public AudioClip narrateBGM; 
 
 
     // Storage \\
@@ -34,10 +36,14 @@ public class NarrateParent : Parent
 
     public override void Begin()
     {
-        base.Begin();
 
+        musicSource.clip = narrateBGM;
+        musicSource.volume = 0.2f;
+        musicSource.Play();
+        base.Begin();
         ChooseText();
         ChooseSplash();
+
     }
 
     public override void InputClick(Vector2 pos)
@@ -51,6 +57,7 @@ public class NarrateParent : Parent
             }
             else if (page == Page.DIED_LAVA || page == Page.DIED_ERUPT || page == Page.DISH_FAIL)
             {
+                musicSource.Stop(); 
                 transition.StartLoadingOut(Type.TITLE);
             }
             else if (page == Page.DISH_SUCCESS)
@@ -64,6 +71,7 @@ public class NarrateParent : Parent
                 }
                 else
                 {
+                    musicSource.Stop(); 
                     transition.StartLoadingOut(Type.TITLE);
                 }
             }

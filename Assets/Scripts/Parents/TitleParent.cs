@@ -5,7 +5,16 @@ public class TitleParent : Parent
     public AudioSource audioSource; 
     public AudioClip startSound; 
 
+    public AudioSource musicSource; 
+    public AudioClip menuMusic;
+
     // Triggers \\
+
+    public override void Begin(){
+        base.Begin();
+        musicSource.clip = menuMusic; 
+        musicSource.Play();
+    }
 
     public override void InputButton (string message)
     {
@@ -14,6 +23,7 @@ public class TitleParent : Parent
             if (message == "Start")
             {
                 audioSource.PlayOneShot(startSound, 0.5f);
+                musicSource.Stop();
                 manager.narrateParent.page = NarrateParent.Page.INTRO;
                 manager.currentRound = 1;
                 transition.StartLoadingOut(Type.NARRATE);

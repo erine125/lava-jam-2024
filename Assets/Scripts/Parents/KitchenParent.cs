@@ -17,6 +17,9 @@ public class KitchenParent : Parent
 
     public AudioSource audioSource; 
     public AudioClip dropInPotSound; 
+    public AudioClip openLetterSound;
+
+    public AudioSource musicSource;
 
 
     // Storage \\
@@ -109,6 +112,7 @@ public class KitchenParent : Parent
         }
         else if (activity == Activity.COOKING)
         {
+            audioSource.Play();
             addedIngredients.Clear();
             PrepareIngredients();
             potRender.sprite = potFrames[1];
@@ -131,6 +135,7 @@ public class KitchenParent : Parent
                 choiceText.text = "";
 
                 // pull up recipe
+                audioSource.PlayOneShot(openLetterSound, 0.5f);
                 recipePaper.gameObject.SetActive(true);
                 manager.chosenDish = (message == "EnvelopeLeft" ? optionLeft : optionRight);
                 UpdateRecipeUi();

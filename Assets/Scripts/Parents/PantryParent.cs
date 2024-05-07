@@ -18,9 +18,13 @@ public class PantryParent : Parent
 
     public AudioSource audioSource; 
     public AudioClip pickupSound;
+    public AudioClip fallingLavaSound;
 
     public Sprite shadowSprite;
     public Vector2 shadowOffset = Vector2.zero;
+
+    public AudioSource musicSource; 
+    public AudioClip dungeonMusic; 
 
 
     // State \\
@@ -69,6 +73,10 @@ public class PantryParent : Parent
     public override void Begin()
     {
         base.Begin();
+
+        musicSource.clip = dungeonMusic;
+        musicSource.volume = 0.3f;
+        musicSource.Play();
 
         manager.RemoveAllHeldIngredients();
         DistributeCollectibles();
@@ -126,6 +134,9 @@ public class PantryParent : Parent
     {
         if (CheckClosestTile (player.pos.x, player.pos.y) == Tile.LAVA)
         {
+            // play falling in lava sound
+            audioSource.PlayOneShot(fallingLavaSound, 0.5f); 
+
             player.state = Player.State.DYING;
                
             manager.narrateParent.page = NarrateParent.Page.DIED_LAVA;
@@ -135,6 +146,7 @@ public class PantryParent : Parent
 
     public void PlayerLeave ()
     {
+        musicSource.Stop();
         player.state = Player.State.LEAVING;
         manager.kitchenParent.activity = KitchenParent.Activity.COOKING;
         transition.StartLoadingOut(Type.KITCHEN, 0);

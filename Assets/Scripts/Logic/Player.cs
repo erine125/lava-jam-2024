@@ -6,6 +6,9 @@ public class Player : MonoBehaviour
 
     public Sprite[] walkFrontSprites, walkSideSprites, walkBackSprites;
 
+    public AudioSource audioSource; 
+    public AudioClip dashSound; 
+
     public float walkSpeed;
     public float timePerFrame = 0.2f;
     public float dashMultiplier = 4f;
@@ -186,6 +189,8 @@ public class Player : MonoBehaviour
                     target.Set(source.x + dashLength, source.y);
                     break;
             }
+            // play dash audio
+            audioSource.PlayOneShot(dashSound, 0.5f); 
             state = State.DASHING;
         }
     }
