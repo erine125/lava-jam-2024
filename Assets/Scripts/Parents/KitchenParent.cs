@@ -188,7 +188,10 @@ public class KitchenParent : Parent
     {
         base.Update();
 
-        HandleOscillating();
+        if (manager.activeParentType == Type.KITCHEN)
+        {
+            HandleOscillating();
+        }
     }
 
 

@@ -79,6 +79,7 @@ public class PantryParent : Parent
         musicSource.Play();
 
         manager.RemoveAllHeldIngredients();
+        RemoveAllCollectibles();
         DistributeCollectibles();
         itemFrame.SetActive(true);
         timeRemaining = timeAllowed;
@@ -96,24 +97,20 @@ public class PantryParent : Parent
     {
         base.Update();
 
-        HandleOscillating();
-
-        if (!transition.IsTransitioning ())
+        if (manager.activeParentType == Type.PANTRY)
         {
-            HandlePickup();
-            UpdateTimer();
-        }
-        else if (player.state == Player.State.DYING)
-        {
-            HandlePlayerShrinking();
-        }
-    }
+            HandleOscillating();
 
-    public override void DoneFadingOut()
-    {
-        base.DoneFadingOut();
-
-        RemoveAllCollectibles();
+            if (!transition.IsTransitioning())
+            {
+                HandlePickup();
+                UpdateTimer();
+            }
+            else if (player.state == Player.State.DYING)
+            {
+                HandlePlayerShrinking();
+            }
+        }
     }
 
     public override void InputButton(string message)
@@ -267,6 +264,8 @@ public class PantryParent : Parent
             Ingredient picked = manager.ingredients[name];
             collectibleIngredients.Add(picked);
             AddIngredientSprite("KitGroundIngredient" + nameNum, picked, pos);
+
+            Debug.Log(picked.displayName + ": " + pos.x + ", " + pos.y);
         }     
     }
 

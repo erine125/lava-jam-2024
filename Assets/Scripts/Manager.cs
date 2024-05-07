@@ -37,6 +37,7 @@ public class Manager : MonoBehaviour
     // Storage \\
 
     private Parent activeParent;
+    public Parent.Type activeParentType { private set; get; }
     private List<Button> activeButtons;
     private PostEffect tintEffect;
 
@@ -72,6 +73,8 @@ public class Manager : MonoBehaviour
 
     public void ChooseActiveParent (Parent.Type parent)
     {
+        this.activeParentType = parent;
+
         titleParent.gameObject.SetActive(parent == Parent.Type.TITLE);
         rulesParent.gameObject.SetActive(parent == Parent.Type.RULES);
         kitchenParent.gameObject.SetActive(parent == Parent.Type.KITCHEN);
