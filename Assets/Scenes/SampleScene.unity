@@ -1175,13 +1175,14 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e722edd8887e54543a14f847c2a23808, type: 3}
   - {fileID: 21300000, guid: baf3d984207c849dabb9cb652f434d4e, type: 3}
   OscillatePerSecond: 6
-  BasePotShakeTime: 0.7
+  BasePotShakeTime: 0.65
   potFrames:
   - {fileID: 21300000, guid: 129eb31f4a12f4c20bfade7219a7e231, type: 3}
   - {fileID: 21300000, guid: b5173014425d941f98a3324f59cbd23d, type: 3}
   - {fileID: 21300000, guid: b02ba0481d1254faeb99e014ca794415, type: 3}
   audioSource: {fileID: 215645780}
   dropInPotSound: {fileID: 8300000, guid: 93163b1200173464c8dd1f8c7310be24, type: 3}
+  openLetterSound: {fileID: 0}
   musicSource: {fileID: 519420035}
 --- !u!82 &215645780
 AudioSource:
@@ -4711,6 +4712,7 @@ MonoBehaviour:
   timeAllowed: 31
   audioSource: {fileID: 1614315969}
   pickupSound: {fileID: 8300000, guid: 3297f425733bc074aa8453cc45abb494, type: 3}
+  fallingLavaSound: {fileID: 0}
   shadowSprite: {fileID: 21300000, guid: 8dcafff65dea3442c949b74fe25ec4d9, type: 3}
   shadowOffset: {x: 0, y: -0.24}
   musicSource: {fileID: 519420035}
@@ -5663,6 +5665,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ee8878dbf7dbf411ba5060b87b2c343c, type: 3}
   - {fileID: 21300000, guid: bb5ef171f162a48209c885c415849a4d, type: 3}
   - {fileID: 21300000, guid: 4813efa362a504756ad4bfa0674e9027, type: 3}
+  audioSource: {fileID: 0}
+  dashSound: {fileID: 0}
   walkSpeed: 6
   timePerFrame: 0.15
   dashMultiplier: 3

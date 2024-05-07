@@ -264,8 +264,6 @@ public class PantryParent : Parent
             Ingredient picked = manager.ingredients[name];
             collectibleIngredients.Add(picked);
             AddIngredientSprite("KitGroundIngredient" + nameNum, picked, pos);
-
-            Debug.Log(picked.displayName + ": " + pos.x + ", " + pos.y);
         }     
     }
 
