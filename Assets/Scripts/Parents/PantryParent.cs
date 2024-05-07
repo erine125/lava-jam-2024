@@ -182,7 +182,7 @@ public class PantryParent : Parent
 
             for (int j = 0; j < entries.Length; j++)
             {
-                tiles[j][23 - i] = entries[j] == "L" ? Tile.LAVA : Tile.GROUND;
+                tiles[j][23 - i] = entries[j].Trim() == "L" ? Tile.LAVA : Tile.GROUND;
                 if (tiles[j][23 - i] == Tile.GROUND)
                 {
                     groundTiles.Add(new Vector2(j, 23 - i));
