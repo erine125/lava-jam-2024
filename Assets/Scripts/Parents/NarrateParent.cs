@@ -115,7 +115,7 @@ public class NarrateParent : Parent
                 rightText.text =
                     @"Dearest Contestant,
 
-Congratulations! We, the judges of SuperChef International, have reviewed your application and would like to welcome you to year’s competition. Please find your contestant’s apron enclosed. Additionally, our competition rulebook will be shipped to you in 3-5 business days, at your expense.
+Congratulations! We, the judges of SuperChef International, have reviewed your application and would like to welcome you to this year’s competition. Please find your contestant’s apron enclosed. Additionally, our competition rulebook will be shipped to you in 3-5 business days, at your expense.
 
 As always, our competition involves three rounds of judging, with only the best contestants continuing on. Round one will consist of an appetizer, round two of an entree, and round three of a dessert. The contestant that passes all three rounds will be crowned this year’s Super Chef, and will have their recipes featured on our prime-time TV program.
 
