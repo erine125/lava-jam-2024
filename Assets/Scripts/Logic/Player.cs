@@ -124,29 +124,50 @@ public class Player : MonoBehaviour
         bool left = Input.GetKey(KeyCode.LeftArrow);
         bool right = Input.GetKey(KeyCode.RightArrow);
 
-        if (up && !down && !left && !right)
+        // change direction
+        if (Input.GetKeyDown (KeyCode.UpArrow)
+            || (up && !down && !left && !right))
         {
             facing = Facing.UP;
             state = State.WALK;
         }
-        else if (!up && down && !left && !right)
+        else if (Input.GetKeyDown(KeyCode.DownArrow)
+            || (!up && down && !left && !right))
         {
             facing = Facing.DOWN;
             state = State.WALK;
         }
-        else if (!up && !down && left && !right)
+        else if (Input.GetKeyDown(KeyCode.LeftArrow)
+            || (!up && !down && left && !right))
         {
             facing = Facing.LEFT;
             state = State.WALK;
         }
-        else if (!up && !down && !left && right)
+        else if (Input.GetKeyDown(KeyCode.RightArrow)
+            || (!up && !down && !left && right))
         {
             facing = Facing.RIGHT;
             state = State.WALK;
         }
-        else
+
+        // stop moving
+        if (state == State.WALK)
         {
-            state = State.STAND;
+            switch (facing)
+            {
+                case Facing.UP:
+                    state = up ? State.WALK : State.STAND;
+                    break;
+                case Facing.DOWN:
+                    state = down ? State.WALK : State.STAND;
+                    break;
+                case Facing.LEFT:
+                    state = left ? State.WALK : State.STAND;
+                    break;
+                case Facing.RIGHT:
+                    state = right ? State.WALK : State.STAND;
+                    break;
+            }
         }
     }
 
