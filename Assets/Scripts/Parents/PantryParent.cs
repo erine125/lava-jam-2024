@@ -104,6 +104,7 @@ public class PantryParent : Parent
             if (!transition.IsTransitioning())
             {
                 HandlePickup();
+                ListenForKeyboardDropping();
                 UpdateTimer();
             }
             else if (player.state == Player.State.DYING)
@@ -317,6 +318,19 @@ public class PantryParent : Parent
 
                 // play pickup audio
                 audioSource.PlayOneShot(pickupSound, 0.5f);
+            }
+        }
+    }
+
+    private void ListenForKeyboardDropping ()
+    {
+        KeyCode[] codes = { KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4 };
+
+        for (int i = 0; i < codes.Length; i++)
+        {
+            if (Input.GetKeyDown(codes[i]))
+            {
+                HandleDropping(i);
             }
         }
     }

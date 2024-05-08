@@ -227,12 +227,12 @@ public class Player : MonoBehaviour
             walkTimer = 0f;
             walkFrameIndex = (walkFrameIndex + 1) % 4;
             spriteRenderer.sprite = sprites[walkFrameIndex];
-            spriteRenderer.flipX = invert;
         }
         else if (!IsMoving())
         {
             spriteRenderer.sprite = sprites[0];
         }
+        spriteRenderer.flipX = invert;
     }
 
     private void CheckBoundsAndLeave()
