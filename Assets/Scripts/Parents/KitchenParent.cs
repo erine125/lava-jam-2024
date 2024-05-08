@@ -325,6 +325,8 @@ public class KitchenParent : Parent
 
     private void CheckDoneCooking()
     {
+
+
         bool haveUsedAllIngredients = true;
         for (int i = 0; i < availableIngredients.Length; i++)
         {
@@ -340,9 +342,9 @@ public class KitchenParent : Parent
         foreach (string shouldHave in manager.chosenDish.ingredients)
         {
             bool found = false;
-            foreach (Ingredient added in addedIngredients)
+            foreach (Ingredient actuallyHas in addedIngredients)
             {
-                if (shouldHave == added.filename)
+                if (shouldHave == actuallyHas.filename)
                 {
                     found = true;
                     break;
@@ -353,6 +355,27 @@ public class KitchenParent : Parent
             {
                 wasCorrect = false;
                 break;
+            }
+        }
+        if (wasCorrect)
+        {
+            foreach (Ingredient actuallyHas in addedIngredients)
+            {
+                bool found = false;
+                foreach (string shouldHave in manager.chosenDish.ingredients)
+                {
+                    if (actuallyHas.filename == shouldHave)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    wasCorrect = false;
+                    break;
+                }
             }
         }
 
