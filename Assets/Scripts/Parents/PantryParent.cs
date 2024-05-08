@@ -127,26 +127,17 @@ public class PantryParent : Parent
 
     // Exposed \\
 
-    public void PlayerVulnerable()
+    public void PlayerReachedTarget()
     {
         if (CheckClosestTile (player.pos.x, player.pos.y) == Tile.LAVA)
         {
-            player.coyoteTime -= Time.deltaTime;
+            // play falling in lava sound
+            audioSource.PlayOneShot(fallingLavaSound, 0.5f); 
 
-            if (player.coyoteTime <= 0)
-            {
-                // play falling in lava sound
-                audioSource.PlayOneShot(fallingLavaSound, 0.5f);
-
-                player.state = Player.State.DYING;
-
-                manager.narrateParent.page = NarrateParent.Page.DIED_LAVA;
-                transition.StartLoadingOut(Type.NARRATE, 0.5f);
-            }
-        }
-        else
-        {
-            player.coyoteTimeLeft = player.coyoteTime;
+            player.state = Player.State.DYING;
+               
+            manager.narrateParent.page = NarrateParent.Page.DIED_LAVA;
+            transition.StartLoadingOut(Type.NARRATE, 0.5f);
         }
     }
 
@@ -226,6 +217,8 @@ public class PantryParent : Parent
         if (timeRemaining < 0)
         {
             player.state = Player.State.DYING;
+            player.target = player.pos;
+            player.source = player.pos;
 
             manager.narrateParent.page = NarrateParent.Page.DIED_ERUPT;
             transition.StartLoadingOut(Type.NARRATE, 0.5f);
