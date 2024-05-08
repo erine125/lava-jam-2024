@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
     public float dashLength = 3f;
     public float pickupDistance = 1.5f;
     public float coyoteTime;
+    public float afterImageInitialAlpha = 0.6f;
+    public float afterImageFadeSpeed = 2f;
 
 
     // State \\
@@ -28,6 +30,8 @@ public class Player : MonoBehaviour
     // Storage \\
 
     private SpriteRenderer spriteRenderer;
+    private SpriteRenderer[] afterImages;
+    private bool[] afterImagesUsed;
     private PantryParent parent;
 
     private float walkTimer;
@@ -45,6 +49,8 @@ public class Player : MonoBehaviour
         facing = Facing.DOWN;
         spriteRenderer = GetComponent<SpriteRenderer>();
         parent = GameObject.Find("PantryOnly").GetComponent<PantryParent>();
+
+        PrepareAfterImages();
     }
 
     public void Init()
@@ -53,6 +59,7 @@ public class Player : MonoBehaviour
         state = State.STAND;
         transform.localScale = new Vector3(10, 10, 1);
         coyoteTimeLeft = 0;
+        facing = Facing.RIGHT;
     }
 
     void Update()
@@ -72,6 +79,7 @@ public class Player : MonoBehaviour
         MovePlayer();
         transform.position = new Vector3(PantryParent.GridSquareSize * pos.x, PantryParent.GridSquareSize * pos.y, 0);
         UpdateSprite();
+        DoAfterImage();
     }
 
 
@@ -106,7 +114,18 @@ public class Player : MonoBehaviour
 
                 if (dashDistanceLeft <= 0)
                 {
-                    state = State.STAND;
+                    state = State.WALK;
+                    afterImagesUsed[0] = false;
+                    afterImagesUsed[1] = false;
+                    afterImagesUsed[2] = false;
+                }
+                else if (dashDistanceLeft <= 1 && !afterImagesUsed[2])
+                {
+                    CreateAfterImage(2);
+                }
+                else if (dashDistanceLeft <= 2 && !afterImagesUsed[1])
+                {
+                    CreateAfterImage(1);
                 }
             }
         }
@@ -179,6 +198,8 @@ public class Player : MonoBehaviour
             // play dash audio
             audioSource.PlayOneShot(dashSound, 0.5f);
             state = State.DASHING;
+
+            CreateAfterImage(0);
         }
     }
 
@@ -231,6 +252,46 @@ public class Player : MonoBehaviour
             if (parent.manager.CountHeldIngredients() > 0)
             {
                 parent.PlayerLeave();
+            }
+        }
+    }
+
+    private void PrepareAfterImages ()
+    {
+        afterImages = new SpriteRenderer[3];
+        afterImagesUsed = new bool[afterImages.Length];
+
+        for (int i = 0; i < afterImages.Length; i++)
+        {
+            GameObject go = new GameObject("PanAfterImage" + i);
+            go.transform.parent = parent.transform;
+            afterImages[i] = go.AddComponent<SpriteRenderer>();
+            afterImages[i].color = new Color(1, 1, 1, 0);
+            go.transform.localScale = new Vector3(10, 10);
+            afterImagesUsed[i] = false;
+        }
+    }
+
+    private void CreateAfterImage (int idx)
+    {
+        afterImages[idx].sprite = spriteRenderer.sprite;
+        afterImages[idx].flipX = spriteRenderer.flipX;
+        afterImages[idx].color = new Color(1, 1, 1, afterImageInitialAlpha);
+        afterImages[idx].gameObject.transform.position = new Vector3(
+            PantryParent.GridSquareSize * pos.x, PantryParent.GridSquareSize * pos.y, 0);
+        afterImagesUsed[idx] = true;
+    }
+
+    private void DoAfterImage ()
+    {
+        float fadeAmt = Time.deltaTime * afterImageFadeSpeed;
+
+        for (int i = 0; i < afterImages.Length; i++)
+        {
+            if (afterImages[i].color.a > 0)
+            {
+                afterImages[i].color = new Color(1, 1, 1,
+                    Mathf.Max(afterImages[i].color.a - fadeAmt, 0));
             }
         }
     }
