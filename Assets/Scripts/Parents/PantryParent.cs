@@ -12,19 +12,19 @@ public class PantryParent : Parent
     public Sprite[] foregroundFrames;
     public float oscillatePerSec = 2f;
     public static float GridSquareSize = 0.4444f;
-    public Vector2 GridAnchor = new Vector2(-8.889f, -4.8884f); // player centered of bottom left tile
+    public Vector2 gridOffset;
     public TextAsset tilemapCsv;
     public float timeAllowed = 31f;
 
-    public AudioSource audioSource; 
+    public AudioSource audioSource;
     public AudioClip pickupSound;
     public AudioClip fallingLavaSound;
 
     public Sprite shadowSprite;
     public Vector2 shadowOffset = Vector2.zero;
 
-    public AudioSource musicSource; 
-    public AudioClip dungeonMusic; 
+    public AudioSource musicSource;
+    public AudioClip dungeonMusic;
 
 
     // State \\
@@ -93,7 +93,7 @@ public class PantryParent : Parent
         player.Init();
     }
 
-    public override void Update ()
+    public override void Update()
     {
         base.Update();
 
@@ -115,33 +115,42 @@ public class PantryParent : Parent
 
     public override void InputButton(string message)
     {
-        if (!transition.IsTransitioning ())
+        if (!transition.IsTransitioning())
         {
             if (message.Substring(0, 7) == "PanItem")
             {
                 HandleDropping(System.Int32.Parse(message.Substring(7, 1)) - 1);
-            }   
+            }
         }
     }
 
 
     // Exposed \\
 
-    public void PlayerReachedTarget()
+    public void PlayerVulnerable()
     {
-        if (CheckClosestTile (player.pos.x, player.pos.y) == Tile.LAVA)
+        if (CheckClosestTile(player.pos.x, player.pos.y) == Tile.LAVA)
         {
-            // play falling in lava sound
-            audioSource.PlayOneShot(fallingLavaSound, 0.5f); 
+            player.coyoteTime -= Time.deltaTime;
 
-            player.state = Player.State.DYING;
-               
-            manager.narrateParent.page = NarrateParent.Page.DIED_LAVA;
-            transition.StartLoadingOut(Type.NARRATE, 0.5f);
+            if (player.coyoteTime <= 0)
+            {
+                // play falling in lava sound
+                audioSource.PlayOneShot(fallingLavaSound, 0.5f);
+
+                player.state = Player.State.DYING;
+
+                manager.narrateParent.page = NarrateParent.Page.DIED_LAVA;
+                transition.StartLoadingOut(Type.NARRATE, 0.5f);
+            }
+        }
+        else
+        {
+            player.coyoteTimeLeft = player.coyoteTime;
         }
     }
 
-    public void PlayerLeave ()
+    public void PlayerLeave()
     {
         musicSource.Stop();
         player.state = Player.State.LEAVING;
@@ -152,7 +161,7 @@ public class PantryParent : Parent
 
     // Utility \\
 
-    private void HandleOscillating ()
+    private void HandleOscillating()
     {
         timeSinceOsc += Time.deltaTime;
 
@@ -165,7 +174,7 @@ public class PantryParent : Parent
         }
     }
 
-    private void LoadTiles ()
+    private void LoadTiles()
     {
         groundTiles = new List<Vector2>();
 
@@ -191,22 +200,15 @@ public class PantryParent : Parent
         }
     }
 
-    private Tile CheckTileAtUnitsPos (float x, float y)
+    private Tile CheckClosestTile(float x, float y)
     {
-        int xidx = (int)Mathf.Round((x - GridAnchor.x) * GridSquareSize);
-        int yidx = (int)Mathf.Round((y - GridAnchor.y) * GridSquareSize);
-
-        return tiles[xidx][yidx];
-    }
-    private Tile CheckClosestTile (float x, float y)
-    {
-        int xidx = (int)Mathf.Round(x);
-        int yidx = (int)Mathf.Round(y);
+        int xidx = (int)Mathf.Round(x + gridOffset.x);
+        int yidx = (int)Mathf.Round(y + gridOffset.y);
 
         return tiles[xidx][yidx];
     }
 
-    private void UpdateTimer ()
+    private void UpdateTimer()
     {
         // cosmetic
         string stringForm = Mathf.FloorToInt(Mathf.Max(timeRemaining, 0)).ToString();
@@ -217,8 +219,6 @@ public class PantryParent : Parent
         if (timeRemaining < 0)
         {
             player.state = Player.State.DYING;
-            player.target = player.pos;
-            player.source = player.pos;
 
             manager.narrateParent.page = NarrateParent.Page.DIED_ERUPT;
             transition.StartLoadingOut(Type.NARRATE, 0.5f);
@@ -264,7 +264,7 @@ public class PantryParent : Parent
             Ingredient picked = manager.ingredients[name];
             collectibleIngredients.Add(picked);
             AddIngredientSprite("KitGroundIngredient" + nameNum, picked, pos);
-        }     
+        }
     }
 
     private void RemoveAllCollectibles()
@@ -283,9 +283,9 @@ public class PantryParent : Parent
         collectibleLocations.Clear();
     }
 
-    private void HandlePickup ()
+    private void HandlePickup()
     {
-        if (Input.GetKeyDown(KeyCode.C) && manager.CountHeldIngredients () < 4)
+        if (Input.GetKeyDown(KeyCode.C) && manager.CountHeldIngredients() < 4)
         {
             // find closest valid ingredient index
             int index = -1;
@@ -316,12 +316,12 @@ public class PantryParent : Parent
                 collectibleIngredients.RemoveAt(index);
 
                 // play pickup audio
-                audioSource.PlayOneShot(pickupSound, 0.5f);      
+                audioSource.PlayOneShot(pickupSound, 0.5f);
             }
         }
     }
 
-    private void HandleDropping (int index)
+    private void HandleDropping(int index)
     {
         if (manager.heldIngredients[index] != null)
         {
@@ -338,7 +338,7 @@ public class PantryParent : Parent
         }
     }
 
-    private void AddIngredientSprite (string gameObjectName, Ingredient ingredient, Vector2 position)
+    private void AddIngredientSprite(string gameObjectName, Ingredient ingredient, Vector2 position)
     {
         GameObject go = new GameObject(gameObjectName);
         go.transform.parent = gameObject.transform;
@@ -359,7 +359,7 @@ public class PantryParent : Parent
         collectibleShadows.Add(gos);
     }
 
-    private void HandlePlayerShrinking ()
+    private void HandlePlayerShrinking()
     {
         playerShrinkingTimer += Time.deltaTime;
         float amt = Mathf.Max(1f - playerShrinkingTimer / 1f, 0) * 10f;
@@ -375,5 +375,5 @@ public class PantryParent : Parent
         GROUND
     }
 
-    
+
 }

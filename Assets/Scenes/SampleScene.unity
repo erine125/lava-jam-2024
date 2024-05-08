@@ -4707,7 +4707,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 6f5c465b5007b4805b3463490810cfdc, type: 3}
   - {fileID: 21300000, guid: 64b7fa771207d44a986f1a938b0f6ef6, type: 3}
   oscillatePerSec: 2
-  GridAnchor: {x: -8.45, y: -1.35}
+  gridOffset: {x: 0, y: 0.05}
   tilemapCsv: {fileID: 4900000, guid: 00e676ebbe98644489c53065d780f949, type: 3}
   timeAllowed: 31
   audioSource: {fileID: 1614315969}
@@ -5672,11 +5672,11 @@ MonoBehaviour:
   dashMultiplier: 3
   dashLength: 3
   pickupDistance: 1.5
+  coyoteTime: 0.15
   facing: 1
   pos: {x: 1, y: 8}
   state: 0
-  target: {x: 1, y: 8}
-  source: {x: 1, y: 8}
+  coyoteTimeLeft: 0
 --- !u!1 &1933875744
 GameObject:
   m_ObjectHideFlags: 0
