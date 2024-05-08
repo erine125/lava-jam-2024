@@ -1,4 +1,6 @@
 using UnityEngine;
+using static Unity.VisualScripting.Member;
+using static UnityEngine.GraphicsBuffer;
 
 public class Player : MonoBehaviour
 {
@@ -14,6 +16,7 @@ public class Player : MonoBehaviour
     public float dashMultiplier = 4f;
     public float dashLength = 3f;
     public float pickupDistance = 1.5f;
+    public float coyoteTime = 0.25f;
 
 
     // State \\
@@ -22,8 +25,6 @@ public class Player : MonoBehaviour
     public Facing facing;
     public Vector2 pos; // in tiles
     public State state;
-    public Vector2 target;
-    public Vector2 source;
 
 
     // Storage \\
@@ -33,6 +34,10 @@ public class Player : MonoBehaviour
 
     private float walkTimer;
     private int walkFrameIndex;
+
+    private float dashDistanceLeft;
+
+    public float coyoteTimeLeft;
 
 
     // Exposed \\
@@ -47,10 +52,9 @@ public class Player : MonoBehaviour
     public void Init ()
     {
         pos = new Vector2(1, 8);
-        source.Set(pos.x, pos.y);
-        target.Set(pos.x, pos.y);
         state = State.STAND;
         transform.localScale = new Vector3(10, 10, 1);
+        coyoteTimeLeft = 0;
     }
 
     void Update()
@@ -60,14 +64,14 @@ public class Player : MonoBehaviour
             PollArrowInput();
             PollDashInput();
         }
+        if (state != State.DASHING && state != State.DYING)
+        {
+            parent.PlayerVulnerable();
+        }
 
         CheckBoundsAndLeave();
 
-        if (IsMoving() && state != State.DYING && state != State.LEAVING)
-        {
-            MoveTowardsTarget();
-        }
-
+        MovePlayer();
         transform.position = new Vector3(PantryParent.GridSquareSize * pos.x, PantryParent.GridSquareSize * pos.y, 0);
         UpdateSprite();
     }
@@ -75,21 +79,12 @@ public class Player : MonoBehaviour
 
     // Utility \\
 
-    private void MoveTowardsTarget ()
+    private void MovePlayer ()
     {
         float travel = Time.deltaTime * walkSpeed;
         travel *= state == State.DASHING ? dashMultiplier : 1;
-        float dist = Mathf.Sqrt (Mathf.Pow(target.x - pos.x, 2) + Mathf.Pow(target.y - pos.y, 2));
 
-        // reached target
-        if (travel >= dist)
-        {
-            pos.Set(target.x, target.y);
-            source.Set(target.x, target.y);
-            state = State.STAND;
-            parent.PlayerReachedTarget();
-        }
-        else
+        if (state == State.WALK || state == State.DASHING)
         {
             switch (facing)
             {
@@ -106,7 +101,22 @@ public class Player : MonoBehaviour
                     pos.x += travel;
                     break;
             }
+
+            if (state == State.DASHING)
+            {
+                dashDistanceLeft -= travel;
+
+                if (dashDistanceLeft <= 0)
+                {
+                    state = State.STAND;
+                }
+            }
         }
+    }
+
+    private bool IsMoving ()
+    {
+        return state == State.WALK || state == State.DASHING;
     }
 
     private void PollArrowInput ()
@@ -116,57 +126,29 @@ public class Player : MonoBehaviour
         bool left = Input.GetKey(KeyCode.LeftArrow);
         bool right = Input.GetKey(KeyCode.RightArrow);
 
-        // reversing
-        if (IsMoving ())
+        if (up && !down && !left && !right)
         {
-            if (facing == Facing.UP && down && !up)
-            {
-                target.Set(source.x, source.y);
-                facing = Facing.DOWN;
-            }
-            else if (facing == Facing.DOWN && up && !down)
-            {
-                target.Set(source.x, source.y);
-                facing = Facing.UP;
-            }
-            else if (facing == Facing.LEFT && right && !left)
-            {
-                target.Set(source.x, source.y);
-                facing = Facing.RIGHT;
-            }
-            else if (facing == Facing.RIGHT && left && !right)
-            {
-                target.Set(source.x, source.y);
-                facing = Facing.LEFT;
-            }
+            facing = Facing.UP;
+            state = State.WALK;
         }
-        // corner turning
+        else if (!up && down && !left && !right)
+        {
+            facing = Facing.DOWN;
+            state = State.WALK;
+        }
+        else if (!up && !down && left && !right)
+        {
+            facing = Facing.LEFT;
+            state = State.WALK;
+        }
+        else if (!up && !down && !left && right)
+        {
+            facing = Facing.RIGHT;
+            state = State.WALK;
+        }
         else
         {
-            if (up && !down && !left && !right)
-            {
-                facing = Facing.UP;
-                target.Set(source.x, source.y + 1);
-                state = State.WALK;
-            }
-            else if (!up && down && !left && !right)
-            {
-                facing = Facing.DOWN;
-                target.Set(source.x, source.y - 1);
-                state = State.WALK;
-            }
-            else if (!up && !down && left && !right)
-            {
-                facing = Facing.LEFT;
-                target.Set(source.x - 1, source.y);
-                state = State.WALK;
-            }
-            else if (!up && !down && !left && right)
-            {
-                facing = Facing.RIGHT;
-                target.Set(source.x + 1, source.y);
-                state = State.WALK;
-            }
+            state = State.STAND;
         }
     }
 
@@ -174,30 +156,11 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
-            switch (facing)
-            {
-                case Facing.UP:
-                    target.Set(source.x, source.y + dashLength);
-                    break;
-                case Facing.DOWN:
-                    target.Set(source.x, source.y - dashLength);
-                    break;
-                case Facing.LEFT:
-                    target.Set(source.x - dashLength, source.y);
-                    break;
-                case Facing.RIGHT:
-                    target.Set(source.x + dashLength, source.y);
-                    break;
-            }
+            dashDistanceLeft = dashLength;
             // play dash audio
             audioSource.PlayOneShot(dashSound, 0.5f); 
             state = State.DASHING;
         }
-    }
-
-    public bool IsMoving ()
-    {
-        return target.x != pos.x || target.y != pos.y;
     }
 
     private void UpdateSprite ()
@@ -239,15 +202,12 @@ public class Player : MonoBehaviour
 
         if (pos.x == 41 || pos.y == 0 || pos.y == 24)
         {
-            target.Set(pos.x, pos.y);
-            source.Set(pos.x, pos.y);
             state = State.STAND;
-            parent.PlayerReachedTarget();
+            coyoteTimeLeft = 0;
+            parent.PlayerVulnerable();
         }
         else if (pos.x == 0 && facing == Facing.LEFT)
         {
-            target.Set(pos.x, pos.y);
-            source.Set(pos.x, pos.y);
             state = State.STAND;
             if (parent.manager.CountHeldIngredients () > 0)
             {
