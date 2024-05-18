@@ -1,1 +1,1 @@
-Unity source code for our submission to [Micro Jam 13](https://itch.io/jam/micro-jam-013). The theme was 'lava'. The completed game is playable online [here](https://luxille.itch.io/lava-chef).
+Unity source code for Lava Chef, a 2D pixel art action game developed in 40 hours as a submission for [Micro Jam 13](https://itch.io/jam/micro-jam-013). The completed game is playable in browser [here](https://luxille.itch.io/lava-chef)!
